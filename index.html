@@ -1,0 +1,1300 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1020">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Тренировки">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+
+
+<title>Тренировки</title>
+<style>
+:root{
+  --bg:#0b1020; --bg2:#0e1529; --card:#141d33; --card2:#19243d; --line:#293654;
+  --text:#f7f9ff; --muted:#98a6bf; --accent:#7cabff; --accent2:#84e0ad;
+  --warn:#ffd36e; --danger:#ff9a9a; --purple:#b79cff; --shadow:0 10px 34px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:linear-gradient(180deg,var(--bg),var(--bg2));color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;min-height:100%}
+body{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app{max-width:430px;margin:0 auto;min-height:100vh;padding:18px 16px 100px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:4px 0 18px}
+.brand h1{font-size:28px;line-height:1.05;margin:0;font-weight:850;letter-spacing:-.5px}
+.brand p{margin:5px 0 0;color:var(--muted);font-size:13px}
+.avatar{width:44px;height:44px;border-radius:15px;background:linear-gradient(145deg,#273e72,#1a2746);display:grid;place-items:center;font-weight:900;border:1px solid #375286;box-shadow:var(--shadow)}
+.hero{background:linear-gradient(145deg,#1d2f58,#18233d);border:1px solid #334a79;border-radius:22px;padding:17px;box-shadow:var(--shadow);margin-bottom:14px}
+.hero .eyebrow{font-size:12px;color:#bcd2ff;font-weight:800;text-transform:uppercase;letter-spacing:.7px}
+.hero h2{font-size:24px;margin:6px 0 6px;letter-spacing:-.3px}
+.hero p{color:#c7d2e8;margin:0 0 14px;font-size:13px;line-height:1.4}
+.heroBtns{display:flex;gap:9px}
+.btn{border:1px solid var(--line);background:#121a2d;color:var(--text);border-radius:14px;padding:12px 14px;font-weight:800;min-height:44px}
+.btn.primary{background:#2d5da7;border-color:#4175c6}
+.btn.green{background:#244c37;border-color:#377052}
+.btn.ghost{background:transparent}
+.btn.full{width:100%}
+.sectionTitle{display:flex;justify-content:space-between;align-items:end;margin:22px 2px 10px}
+.sectionTitle h3{margin:0;font-size:17px}
+.sectionTitle span{font-size:12px;color:var(--muted)}
+.dayGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.dayCard{border:1px solid var(--line);background:rgba(20,29,51,.95);border-radius:18px;padding:15px;text-align:left;min-height:92px;box-shadow:0 7px 22px rgba(0,0,0,.14)}
+.dayCard strong{font-size:20px;display:block}
+.dayCard small{display:block;color:var(--muted);margin-top:5px;line-height:1.3}
+.dayCard.c{background:linear-gradient(145deg,#173124,#13251c);border-color:#315840}
+.quickGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-top:10px}
+.quick{border:1px solid var(--line);background:#121a2d;border-radius:15px;padding:13px 8px;text-align:center;font-weight:800;color:#dfe8fa}
+.historyList{display:grid;gap:8px}
+.historyItem{border:1px solid var(--line);background:#131c30;border-radius:16px;padding:13px 14px;display:flex;justify-content:space-between;align-items:center;min-height:58px}
+.historyItem .left{display:flex;gap:10px;align-items:center}
+.dayPill{min-width:42px;height:34px;padding:0 10px;border-radius:12px;background:#22345a;display:grid;place-items:center;font-weight:900;color:#d9e6ff}
+.dayPill.c{background:#21422e;color:#d8ffe4}
+.historyMeta b{font-size:14px}.historyMeta small{display:block;color:var(--muted);margin-top:2px}
+.chev{color:#73819a;font-size:22px}
+.pageHead{display:flex;align-items:center;gap:10px;margin:2px 0 14px}
+.back{width:42px;height:42px;border-radius:14px;border:1px solid var(--line);background:#121a2d;color:white;font-size:20px}
+.pageHead h2{margin:0;font-size:23px;letter-spacing:-.3px}
+.pageHead p{margin:3px 0 0;color:var(--muted);font-size:12px}
+.sessionProgress{border:1px solid var(--line);background:#11192b;border-radius:16px;padding:13px;margin-bottom:12px}
+.progressTop{display:flex;justify-content:space-between;font-size:12px;color:#b8c5dd;margin-bottom:8px}
+.bar{height:8px;border-radius:999px;background:#26324d;overflow:hidden}
+.bar>span{display:block;height:100%;background:linear-gradient(90deg,#6ea8fe,#88e0af);width:0%;transition:.2s}
+.exercise{border:1px solid var(--line);background:var(--card);border-radius:19px;padding:14px;margin:10px 0;box-shadow:0 6px 20px rgba(0,0,0,.12)}
+.exHead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.exTitle{font-size:16px;font-weight:850;line-height:1.2}
+.en{display:block;color:var(--muted);font-size:11px;margin-top:4px;font-weight:600}
+.iconBtns{display:flex;gap:7px}
+.iconBtn{width:36px;height:36px;border-radius:12px;border:1px solid var(--line);background:#10182a;color:#d8e5ff;font-weight:900}
+.prev{margin-top:10px;background:#10192c;border:1px solid #253454;border-radius:12px;padding:9px 10px;color:#bdc9df;font-size:12px;line-height:1.4}
+.sets{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+.set{background:#0e1627;border:1px solid #263555;border-radius:13px;padding:9px}
+.set strong{display:flex;justify-content:space-between;color:#cbd6ea;font-size:11px;margin-bottom:7px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.fields label{font-size:10px;color:#8190aa;display:block}
+.fields input{width:100%;margin-top:4px;background:#0a1120;border:1px solid #32415f;border-radius:9px;color:white;padding:9px 8px;font-size:16px}
+.exProgress{margin-top:10px}
+.exProgress .progressTop{margin-bottom:6px}
+.altBadge{display:inline-block;margin-top:8px;padding:6px 8px;border-radius:10px;background:#2f2852;color:#dbcfff;font-size:11px;font-weight:800}
+.footerAction{position:sticky;bottom:calc(10px + env(safe-area-inset-bottom));padding-top:10px}
+.footerAction .btn{box-shadow:0 10px 35px rgba(0,0,0,.35)}
+.checkItem{border:1px solid var(--line);background:#131c30;border-radius:16px;padding:13px;margin:8px 0;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.checkItem label{display:flex;gap:10px;align-items:center;font-weight:750;line-height:1.3}
+.checkItem input{width:22px;height:22px}
+.checkItem small{color:var(--muted);text-align:right}
+.smallInfo{width:32px;height:32px;border-radius:11px;border:1px solid var(--line);background:#10182a;color:#cfe0ff;font-weight:900}
+.metricGrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.metric{border:1px solid var(--line);background:#131c30;border-radius:16px;padding:13px}
+.metric span{color:var(--muted);font-size:11px}.metric b{display:block;font-size:21px;margin-top:4px}
+.formCard{border:1px solid var(--line);background:#131c30;border-radius:18px;padding:14px;margin-top:10px}
+.formRow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.formRow input{width:100%;background:#0b1222;border:1px solid #32415f;border-radius:10px;padding:11px;color:white;font-size:16px}
+.achGrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.ach{border:1px solid var(--line);background:#131c30;border-radius:17px;padding:13px;min-height:120px}
+.ach.locked{opacity:.48;filter:saturate(.6)}
+.ach .emoji{font-size:27px}.ach b{display:block;margin:6px 0 4px;font-size:14px}.ach small{color:var(--muted);line-height:1.35}
+.modalWrap{position:fixed;inset:0;background:rgba(3,7,14,.72);display:none;align-items:flex-end;justify-content:center;z-index:50}
+.sheet{width:100%;max-width:430px;max-height:88vh;overflow:auto;background:#11192b;border-radius:24px 24px 0 0;border:1px solid #2c3956;padding:18px 16px calc(22px + env(safe-area-inset-bottom));box-shadow:0 -20px 60px rgba(0,0,0,.4)}
+.handle{width:42px;height:5px;border-radius:99px;background:#3d4960;margin:0 auto 14px}
+.sheet h3{margin:0 0 5px;font-size:22px}.sheet .sub{color:var(--muted);font-size:12px}
+.guideStep{margin:12px 0;border-left:3px solid #4e76b8;padding-left:11px;color:#d8e1f1;line-height:1.45;font-size:14px}
+.altCard{border:1px solid var(--line);background:#151f35;border-radius:16px;padding:13px;margin:9px 0}
+.altCard b{font-size:15px}.altCard .equip{color:#9db7e8;font-size:11px;margin-top:3px}.altCard p{color:#c1cbe0;font-size:12px;line-height:1.4;margin:7px 0}
+.yt{display:inline-block;color:#bcd3ff;text-decoration:none;font-weight:800;font-size:12px;margin-top:5px}
+.detailRows{display:grid;gap:8px;margin-top:12px}
+.detailRow{border:1px solid var(--line);background:#121a2d;border-radius:13px;padding:10px}
+.detailRow b{display:block}.detailRow small{color:var(--muted)}
+.safe{color:#b9f1cb}.warn{color:#ffe09b}
+.bottomNav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(430px,100%);padding:9px 12px calc(9px + env(safe-area-inset-bottom));background:rgba(10,15,27,.92);backdrop-filter:blur(18px);border-top:1px solid #25314a;display:grid;grid-template-columns:repeat(4,1fr);gap:7px;z-index:20}
+.navBtn{background:transparent;border:0;color:#7e8da8;padding:8px 3px;border-radius:12px;font-size:11px;font-weight:800}
+.navBtn.active{color:#dce8ff;background:#17233a}
+.navBtn span{display:block;font-size:18px;margin-bottom:2px}
+.cycle{display:flex;gap:5px;overflow:auto;padding-bottom:2px;margin-top:12px}
+.cycle span{flex:0 0 auto;padding:6px 9px;border-radius:10px;background:#121a2c;border:1px solid var(--line);font-size:11px;color:#98a6bf}
+.cycle span.next{background:#25477e;color:white;border-color:#3d6db9}
+.notice{border:1px solid #56472d;background:#332b1d;color:#ffe2a6;border-radius:15px;padding:11px 12px;font-size:12px;line-height:1.4;margin:10px 0}
+</style>
+
+<style>
+/* v3 additions */
+.hero .planlabel{font-size:12px;color:#bcd2ff;font-weight:850;text-transform:uppercase;letter-spacing:.7px}
+.planProgress{margin-top:12px}
+.planSteps{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin-top:8px}
+.planStep{height:7px;border-radius:99px;background:#2a3652}
+.planStep.done{background:#537fc5}.planStep.current{background:#86dca8}
+.workoutDesc{border:1px solid #314365;background:linear-gradient(145deg,#141e34,#111a2c);border-radius:18px;padding:14px;margin:10px 0}
+.workoutDesc b{font-size:14px}.workoutDesc p{font-size:12px;color:#c1cce0;line-height:1.48;margin:7px 0 0}
+.machineVisual{height:118px;border-radius:15px;background:radial-gradient(circle at 70% 20%,#263657,#111827 60%);border:1px solid #2c3a58;margin:11px 0;overflow:hidden;display:grid;place-items:center}
+.machineVisual svg{width:100%;height:100%}
+.machineCaption{font-size:10px;color:#7f90ac;text-align:center;margin-top:-5px;margin-bottom:7px}
+.milestones{display:flex;gap:5px;overflow-x:auto;padding:4px 0 2px}
+.mile{flex:0 0 auto;border:1px solid #31405f;background:#101827;color:#7f8fa9;padding:5px 7px;border-radius:9px;font-size:10px;font-weight:800}
+.mile.hit{background:#244c37;color:#d9ffe5;border-color:#3b7053}
+.mile.now{background:#294b7d;color:white;border-color:#4777b9}
+.weekCard{border:1px solid var(--line);background:#131c30;border-radius:18px;padding:14px;margin-top:10px}
+.weekRow{margin:10px 0}.weekRow .progressTop{margin-bottom:6px}
+.skip{opacity:.65}.skip .dayPill{background:#3e3440!important;color:#e2cce2!important}
+.ach .bar{margin-top:9px}.ach .progressTop{margin-top:8px;margin-bottom:5px}
+.altCard .machineVisual{height:92px}
+.guideImage{height:150px}
+</style>
+
+
+<style>
+/* ===== v4 premium iPhone UI ===== */
+:root{
+  --bg:#080d18;
+  --bg2:#0b1221;
+  --card:#111a2d;
+  --card2:#17233b;
+  --line:#2a3856;
+  --text:#f7f9ff;
+  --muted:#91a0ba;
+  --accent:#78a9ff;
+  --accent2:#78dda6;
+  --violet:#b495ff;
+  --gold:#ffd36f;
+  --rose:#ff9db6;
+}
+body{
+  background:
+    radial-gradient(circle at 50% -10%, rgba(92,132,221,.23), transparent 34%),
+    radial-gradient(circle at 95% 28%, rgba(120,221,166,.08), transparent 28%),
+    linear-gradient(180deg,#080d18,#0a1120 46%,#080d18);
+}
+.app{padding-top:14px}
+.topbar{margin-bottom:14px}
+.brand h1{font-size:30px}
+.brand p{color:#aebbd0}
+.dateChip{
+  display:inline-flex;align-items:center;gap:7px;margin-top:7px;
+  padding:7px 10px;border-radius:12px;background:#111b30;border:1px solid #293a5a;
+  color:#c6d6f2;font-size:11px;font-weight:750
+}
+.dateDot{width:7px;height:7px;border-radius:50%;background:var(--accent2);box-shadow:0 0 12px rgba(120,221,166,.75)}
+.hero{
+  position:relative;overflow:hidden;
+  background:
+    radial-gradient(circle at 88% 5%, rgba(133,170,255,.24), transparent 32%),
+    linear-gradient(145deg,#1d315a,#141f38);
+  border-color:#39558c;
+}
+.hero:after{
+  content:"";position:absolute;right:-30px;bottom:-45px;width:150px;height:150px;border-radius:50%;
+  border:24px solid rgba(124,169,255,.07)
+}
+.hero h2{font-size:30px}
+.hero p{font-size:13px;line-height:1.5;max-width:310px}
+.hero .btn{position:relative;z-index:2}
+.dayCard{
+  color:var(--text)!important;
+  background:
+    linear-gradient(145deg,rgba(22,34,58,.98),rgba(16,25,43,.98));
+  border-color:#30415f;
+  box-shadow:0 8px 22px rgba(0,0,0,.16);
+}
+.dayCard strong,.dayCard small,.quick{color:inherit}
+.dayCard strong{color:#f8fbff!important}
+.dayCard small{color:#9dabc2!important}
+.dayCard:hover,.dayCard:active{border-color:#5a78aa;transform:translateY(-1px)}
+.dayCard.c{
+  background:linear-gradient(145deg,#173224,#102319);
+  border-color:#386149;
+}
+.dayCard.rest{
+  background:linear-gradient(145deg,#332844,#211c31);
+  border-color:#5f4c78;
+}
+.historyItem{color:var(--text)!important;text-align:left}
+.historyPct{
+  min-width:44px;height:34px;border-radius:12px;display:grid;place-items:center;
+  background:#102139;border:1px solid #2e456d;color:#cfe0ff;font-size:11px;font-weight:900
+}
+.historyPct.full{background:#183c2a;border-color:#2e6245;color:#caffda}
+.historyPct.zero{background:#30252d;border-color:#57404d;color:#efc9d8}
+.miniBar{height:5px;border-radius:99px;background:#26324b;overflow:hidden;margin-top:6px;width:120px}
+.miniBar span{display:block;height:100%;background:linear-gradient(90deg,#6fa4ff,#76dda4)}
+.progressHalo{
+  border-radius:20px;padding:14px;border:1px solid #334968;
+  background:linear-gradient(145deg,#101b31,#0f1728)
+}
+.progressHalo .bar{height:10px}
+.planRibbon{display:flex;align-items:center;gap:5px;margin-top:10px}
+.planNode{height:8px;flex:1;border-radius:99px;background:#26324a}
+.planNode.done{background:linear-gradient(90deg,#4d78bc,#6998df)}
+.planNode.current{background:#7dddaa;box-shadow:0 0 15px rgba(125,221,170,.5)}
+.planNode.rest{background:#5d4a76}
+.planLabels{display:flex;justify-content:space-between;margin-top:5px;color:#75849f;font-size:9px}
+.workoutDesc{
+  background:
+    radial-gradient(circle at 100% 0%,rgba(124,169,255,.08),transparent 28%),
+    linear-gradient(145deg,#121d31,#0f1728)
+}
+.exercise{
+  background:
+    radial-gradient(circle at 95% 0%,rgba(124,169,255,.05),transparent 24%),
+    linear-gradient(145deg,#121c30,#101827);
+  border-color:#2d3b59
+}
+.exTitle{color:#f8fbff}
+.set{background:#0b1322}
+.set input{background:#08101e;border-color:#334563}
+.achGrid{grid-template-columns:1fr 1fr}
+.ach{
+  position:relative;overflow:hidden;cursor:pointer;color:var(--text);
+  background:linear-gradient(145deg,#121c30,#0e1728)
+}
+.ach:after{
+  content:"";position:absolute;width:70px;height:70px;border-radius:50%;
+  right:-25px;top:-25px;background:rgba(124,169,255,.05)
+}
+.ach.locked{opacity:.72;filter:none}
+.ach.locked .emoji{filter:grayscale(.8);opacity:.65}
+.difficulty{
+  display:inline-flex;margin-top:7px;padding:4px 7px;border-radius:8px;
+  font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.5px
+}
+.diff-low{background:#183a2a;color:#bdf3cf}
+.diff-mid{background:#3a3320;color:#ffe2a2}
+.diff-high{background:#402835;color:#ffc6d7}
+.diff-epic{background:#2e2850;color:#dbcfff}
+.achOverall{
+  margin:11px 0 13px;padding:14px;border-radius:18px;border:1px solid #344765;
+  background:linear-gradient(145deg,#172640,#111b2f)
+}
+.achOverall .bar{height:11px}
+.restCard{
+  border:1px solid #584c70;background:linear-gradient(145deg,#2c2440,#1b1828);
+  border-radius:20px;padding:15px;margin-bottom:12px
+}
+.restCard h3{margin:0 0 6px;font-size:20px}
+.restCard p{margin:0;color:#c9bed9;font-size:12px;line-height:1.45}
+.completeScreen{
+  min-height:calc(100vh - 120px);display:flex;flex-direction:column;justify-content:center;text-align:center
+}
+.completeBurst{
+  width:112px;height:112px;border-radius:50%;margin:0 auto 18px;position:relative;
+  display:grid;place-items:center;background:radial-gradient(circle,#254d39 0 52%,#173022 53% 100%);
+  border:1px solid #3e7658;box-shadow:0 0 55px rgba(120,221,166,.22)
+}
+.completeBurst:before,.completeBurst:after{
+  content:"";position:absolute;inset:-14px;border-radius:50%;border:2px dashed rgba(255,211,111,.38);animation:spin 12s linear infinite
+}
+.completeBurst:after{inset:-28px;border-color:rgba(124,169,255,.22);animation-direction:reverse;animation-duration:18s}
+@keyframes spin{to{transform:rotate(360deg)}}
+.completeBurst b{font-size:28px;color:#d9ffe5}
+.completeScreen h1{font-size:31px;margin:0 0 7px}
+.completeScreen .speech{color:#c7d2e7;line-height:1.55;font-size:14px;max-width:330px;margin:0 auto 18px}
+.completeStats{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:6px 0 16px}
+.completeStat{background:#111b2d;border:1px solid #2e3d5b;border-radius:16px;padding:12px}
+.completeStat span{font-size:10px;color:#8796af}.completeStat b{display:block;font-size:20px;margin-top:4px}
+.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:80}
+.confetti i{position:absolute;top:-20px;width:8px;height:14px;border-radius:2px;animation:fall 1.8s ease-in forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.8}}
+.achDetailHero{text-align:center;padding:8px 0 14px}
+.achDetailHero .bigEmoji{font-size:54px}
+.achDetailHero h3{font-size:25px;margin:8px 0 5px}
+.achReq{border:1px solid #334563;background:#101a2c;border-radius:16px;padding:12px;margin-top:12px}
+.achReq b{display:block;margin-bottom:5px}
+.restPill{background:#2f2740!important;color:#e4d7ff!important}
+</style>
+
+</head>
+<body>
+<div class="app" id="app"></div>
+<div class="bottomNav" id="nav"></div>
+<div class="modalWrap" id="modalWrap"><div class="sheet" id="sheet"></div></div>
+<script>
+const CYCLE=["A1","C","B1","C","A2","C","B2","C"];
+const defs={
+A1:{title:"A1",sub:"Спина + бицепс · ширина и база",ex:[
+E("pullup","Подтягивания — гравитрон","Assisted Pull-Up","23 кг противовеса · 4×12","8–12",4,true,"Широчайшие, бицепс, верх спины",
+["Грудь слегка вверх, плечи опущены.","Начни движение лопатками вниз, затем тяни локти к рёбрам.","Без раскачки и рывка.","Внизу не проваливай плечи к ушам."],
+["Раскачка корпуса","Подбородок любой ценой","Полное расслабление плеч внизу"],
+[A("Lat Pulldown","Вертикальная тяга в блоке","Блочный тренажёр","Похожий паттерн, проще дозировать вес."),A("Neutral Grip Pull-Up","Подтягивания нейтральным хватом","Гравитрон","Часто комфортнее для плеч.")]),
+E("dips","Брусья — гравитрон","Assisted Dip","23 кг противовеса · 4×12","8–12",4,true,"Трицепс, передняя часть плеча, грудь",
+["Корпус стабилен.","Опускайся только до комфортной глубины.","Локти движутся естественно, без насильственного разведения."],
+["Провал плеч вниз","Рывок из нижней точки"],[A("Triceps Machine","Трицепс-машина","Тренажёр","Меньше требований к стабилизации плеча.")]),
+E("lat","Вертикальная тяга","Lat Pulldown","40 кг","10–12",3,false,"Широчайшие и верх спины",
+["Тяни локти вниз, а не рукоять руками.","Грудь слегка вверх.","Не задирай плечи к ушам."],
+["Сильный отклон корпуса","Тяга за шею"],[A("Plate Loaded Pulldown","Рычажная вертикальная тяга","Рычажный тренажёр","Можно работать каждой рукой независимо; использовать только если плечу комфортно.")]),
+E("row","Горизонтальная тяга","Seated Row","40 кг","10–12",3,false,"Середина спины, ромбовидные, широчайшие",
+["Тяни к низу груди/верхней части живота.","Корпус почти неподвижен.","Отпускай вес контролируемо."],
+["Дёргать поясницей","Задирать плечи"],[A("Chest Supported Row","Тяга с упором грудью","Рычажный тренажёр","Меньше читинга корпусом, удобно чувствовать спину.")]),
+E("rear","Обратная бабочка","Reverse Pec Deck","23 кг · до 4×15","12–15",4,false,"Задняя дельта, верх спины",
+["Грудь прижата к подушке.","Локти идут назад-в стороны.","Плечи не тянуть к ушам.","Короткая пауза в конечной точке."],
+["Сведение лопаток любой ценой","Слишком тяжёлый вес и короткая амплитуда"],[A("Face Pull","Тяга каната к лицу","Кроссовер + канат","Больше внешней ротации и работы верхней части спины.")]),
+E("backext","Разгибание спины","Back Extension","40 кг · 3×15","12–15",3,false,"Разгибатели позвоночника, ягодицы",
+["Двигайся плавно.","Разгибайся до нейтрали, не переразгибай поясницу.","Напряжение в мышцах вдоль поясницы допустимо; резкая боль — нет."],
+["Переразгибание назад","Рывок весом"],[A("Hyperextension","Гиперэкстензия","Скамья 45°","Простой вариант без тренажёра.")]),
+E("biceps","Бицепс-машина","Biceps Curl Machine","≈18 кг","10–12",3,false,"Бицепс",
+["Локти фиксированы.","Не отрывай плечи от опоры.","Опускай медленнее, чем поднимаешь."],
+["Раскачка","Слишком короткая амплитуда"],[A("Preacher Curl","Скамья Скотта","Скамья + EZ/гантели","Хорошо фиксирует плечо."),A("Cable Curl","Сгибание на блоке","Кроссовер","Постоянное натяжение по амплитуде."),A("EZ Curl","Сгибание с EZ-грифом","EZ-гриф","Удобный свободный вес.")]),
+E("hammer","Молотки","Hammer Curl","8 кг","10–12",3,false,"Брахиалис, бицепс, предплечье",
+["Ладони всё время смотрят друг на друга.","Локти возле корпуса.","Не вращай кисть."],
+["Супинация кисти","Раскачка"],[A("Rope Hammer Curl","Молотки с канатом","Нижний блок + канат","То же нейтральное положение кисти.")]),
+E("wristup","Предплечье — ладонь вверх","Wrist Curl","10 кг","15–20",3,false,"Сгибатели предплечья",
+["Предплечье лежит на опоре.","Двигается только кисть."],["Двигать локтем"],[A("Cable Wrist Curl","Сгибание кисти на блоке","Нижний блок","Плавная нагрузка.")]),
+E("wristdown","Предплечье — ладонь вниз","Reverse Wrist Curl","Штанга 10 кг","15–20",3,false,"Разгибатели предплечья",
+["Хват сверху.","Двигается только кисть."],["Слишком большой вес"],[A("Dumbbell Reverse Wrist Curl","Разгибание кисти с гантелью","Гантель","Можно работать по одной руке.")])
+]},
+A2:{title:"A2",sub:"Спина + бицепс · толщина и вариации",ex:[]},
+B1:{title:"B1",sub:"Плечи + трицепс · ширина плеч",ex:[
+E("dips","Брусья — гравитрон","Assisted Dip","23 кг противовеса · 4×12","8–12",4,true,"Трицепс, плечевой пояс, грудь",
+["Корпус стабилен.","Комфортная глубина.","Без боли в плече."],["Провал плеч"],[A("Triceps Machine","Трицепс-машина","Тренажёр","Стабильная альтернатива.")]),
+E("pullup","Подтягивания — гравитрон","Assisted Pull-Up","23 кг противовеса · 4×12","8–12",3,true,"Широчайшие и бицепс",
+["Сегодня поддерживающий объём.","Не доводи каждый подход до отказа."],["Раскачка"],[A("Lat Pulldown","Вертикальная тяга","Блочный тренажёр","Если нужно разгрузить подтягивания.")]),
+E("press","Жим плеч — тренажёр","Shoulder Press","Узкий/нейтральный хват","8–12",3,false,"Передняя и средняя дельта, трицепс",
+["Используй только комфортный узкий/нейтральный хват.","Не опускай локти чрезмерно глубоко.","При ощущении «сейчас стрельнет» прекращай."],
+["Широкий болезненный хват","Жим через боль"],[A("Neutral DB Press","Жим гантелей нейтральным хватом","Гантели","Только если плечу комфортно.")]),
+E("latmachine","Средняя дельта — тренажёр","Lateral Raise Machine","18 кг","12–15",3,false,"Средняя дельта",
+["Веди движение локтями.","Плечи не поднимать к ушам.","До уровня плеч."],["Раскачка","Слишком высокий подъём"],[A("Cable Lateral Raise","Разведение руки на блоке","Кроссовер","Ровное натяжение и работа по одной руке.")]),
+E("latdb","Разведения гантелей","Dumbbell Lateral Raise","5 кг · 3×12–15","12–15",3,false,"Средняя дельта",
+["Лёгкий сгиб локтей.","Подъём до уровня плеч.","Корпус неподвижен."],["Мах всем телом"],[A("Cable Lateral Raise","Разведение на блоке","Кроссовер","Удобно дозировать нагрузку.")]),
+E("rear","Обратная бабочка","Reverse Pec Deck","23 кг","12–15",3,false,"Задняя дельта",
+["Локти назад-в стороны.","Грудь на подушке.","Шея расслаблена."],["Шраги вместо разведения"],[A("Face Pull","Тяга каната к лицу","Кроссовер + канат","Хорошая вариация для B2.")]),
+E("rope","Канат на трицепс","Rope Pushdown","Подбирается","10–15",3,false,"Трицепс",
+["Локти прижаты.","Внизу мягко разведи концы каната."],["Двигать плечом"],[A("Straight Bar Pushdown","Разгибание с прямой рукоятью","Верхний блок","Проще прогрессировать по весу.")]),
+E("triceps","Трицепс-машина","Triceps Machine","Подбирается","10–12",3,false,"Трицепс",
+["Локти фиксированы.","Без рывка."],["Отрывать корпус"],[A("EZ Skull Crusher","Французский жим EZ","EZ-гриф","Свободный вес; замена, если удобно и свободно.")]),
+E("shrug","Шраги","Dumbbell Shrug","10 кг","12–15",3,false,"Верх трапеции",
+["Голова нейтральна.","Плечи строго вверх.","Короткая пауза наверху."],["Круги плечами","Голова вперёд"],[A("Machine Shrug","Шраги в тренажёре","Тренажёр","Удобнее держать траекторию.")]),
+E("wristup","Предплечье — ладонь вверх","Wrist Curl","10 кг","15–20",3,false,"Сгибатели предплечья",["Двигается кисть."],["Двигать локтем"],[]),
+E("wristdown","Предплечье — ладонь вниз","Reverse Wrist Curl","Штанга 10 кг","15–20",3,false,"Разгибатели предплечья",["Контролируй кисть."],["Слишком тяжело"],[])
+]},
+B2:{title:"B2",sub:"Плечи + трицепс · вариация без лишней смены базы",ex:[]}
+};
+
+function E(id,ru,en,prev,target,sets,reverse,muscles,steps,errors,alts){return {id,ru,en,prev,target,sets,reverse,muscles,steps,errors,alts}}
+function A(en,ru,equip,why){return {en,ru,equip,why}}
+
+defs.A2.ex = defs.A1.ex.map((x,i)=>JSON.parse(JSON.stringify(x)));
+defs.B2.ex = defs.B1.ex.map((x,i)=>JSON.parse(JSON.stringify(x)));
+
+// Meaningful variations, not random swapping.
+defs.A2.ex = defs.A2.ex.map(x=>{
+  if(x.id==="lat"){x.ru="Тяга с упором грудью";x.en="Chest Supported Row";x.prev="по 10 кг на сторону";x.alts=[A("Seated Row","Горизонтальная тяга","Блочный тренажёр","Вернуться к A1-варианту, если тренажёр занят.")];}
+  if(x.id==="row"){x.ru="Вертикальная тяга безопасным хватом";x.en="Lat Pulldown Variant";x.prev="Подобрать без боли";x.steps=["Выбери нейтральный/комфортный хват.","Если плечо даёт предостерегающее ощущение — не делай.","Тяни локти вниз."];x.alts=[A("Lat Pulldown","Обычный Lat Pulldown","Блочный тренажёр","Безопасная база, если вариация не подходит.")];}
+  if(x.id==="biceps"){x.ru="Бицепс — альтернативный вариант";x.en="Preacher / Cable Curl";x.prev="Подбирается";x.alts=[A("Biceps Curl Machine","Бицепс-машина","Тренажёр","Вернуться к стабильной базе."),A("Cable Curl","Сгибание на блоке","Кроссовер","Ровное сопротивление.")];}
+  return x;
+});
+defs.B2.ex = defs.B2.ex.map(x=>{
+  if(x.id==="rear"){x.ru="Face Pull";x.en="Face Pull";x.prev="Лёгкий вес";x.steps=["Канат примерно к лицу.","Локти идут в стороны.","Не превращай движение в тяжёлую тягу корпусом."];x.alts=[A("Reverse Pec Deck","Обратная бабочка","Тренажёр","Если задняя дельта лучше чувствуется там.")];}
+  if(x.id==="triceps"){x.ru="Французский жим EZ / трицепс-машина";x.en="EZ Skull Crusher / Triceps Machine";x.prev="+3 кг на сторону / подобрать";x.alts=[A("Triceps Machine","Трицепс-машина","Тренажёр","Самая простая и стабильная замена."),A("EZ Skull Crusher","Французский жим EZ","EZ-гриф","Когда свободен и комфортен.")];}
+  return x;
+});
+
+const morning=[
+M("warmarms","Разминка рук и плеч","1 мин","Круги плечами вперёд/назад, локти и кисти. Всё мягко, без рывков.","Разогреть плечевой пояс."),
+M("warmneck","Мягкая разминка шеи","45 сек","Повороты вправо/влево и лёгкие наклоны. Не делай круги головой через крайние положения.","Подготовить шею к изометрии."),
+M("catcow","Кошка-корова","8–10 повторов","На четвереньках плавно округляй и разгибай позвоночник в комфортной амплитуде.","Мобильность спины."),
+M("legs","Разминка ног","1 мин","Неглубокие приседания без веса + движения голеностопом.","Разбудить ноги и таз."),
+M("breath","Диафрагмальное дыхание","1–2 мин","Спокойный вдох нижними рёбрами и животом, на вдохе тазовое дно расслабляется.","Дыхание и расслабление тазового дна."),
+M("pelvslow","Тазовое дно — медленно","5×5 сек","Сократи тазовое дно, затем полностью расслабь примерно на 10 секунд.","Контроль тазового дна; не делать во время мочеиспускания."),
+M("pelvfast","Тазовое дно — быстро","5 повторов","Короткое сокращение → полное расслабление.","Контроль быстрых сокращений."),
+M("reverse","Обратный Кегель","5 дыханий","На вдохе сознательно расслабь промежность, без натуживания.","Учимся не только сжимать, но и расслаблять."),
+M("bridge","Ягодичный мост","2×15","Подними таз за счёт ягодиц, не переразгибай поясницу.","Ягодицы и таз."),
+M("neckfront","Шея — изометрия вперёд","2×10 сек","Ладонь на лоб, голова не двигается, умеренное усилие.","Передняя часть шеи."),
+M("neckback","Шея — изометрия назад","2×10 сек","Дави затылком в ладонь, не запрокидывай голову.","Задняя часть шеи."),
+M("neckside","Шея — изометрия в стороны","2×10 сек / сторона","Ладонь сбоку головы, голова остаётся ровно.","Боковые мышцы шеи."),
+M("vacuum","Вакуум","3×15–20 сек","После спокойного выдоха мягко втянуть живот. Без боли и без максимального натуживания.","Контроль корпуса; не «сжигает» жир локально.")
+];
+function M(id,name,dose,guide,why){return {id,name,dose,guide,why}}
+
+const cRoutine=[
+{id:"rot",name:"Наружная ротация плеча",en:"External Rotation",dose:"2×12–15 / сторона",type:"sets",guide:"Локоть прижат к боку, кисть уходит наружу. Вес маленький, корпус не разворачивать."},
+{id:"legpress",name:"Жим ногами",en:"Leg Press",dose:"3×12–15",type:"sets",guide:"Стопы устойчиво, колени идут по линии носков. Не выпрямляй колени в жёсткий замок."},
+{id:"lowerabs",name:"Обратные скручивания — опционально",en:"Reverse Crunch",dose:"2×12–15",type:"check",optional:true,guide:"Таз слегка подкручивается к рёбрам. Не раскачивай ноги. Это не обязательный пункт: талия в первую очередь меняется за счёт снижения жира."},
+{id:"tread",name:"Дорожка",en:"Treadmill",dose:"30–40 мин",type:"cardio",guide:"Быстрая ходьба или лёгкий бег в устойчивом темпе. Длинное кардио — в конце."}
+];
+
+const state=JSON.parse(localStorage.getItem("maxTrainingApp")||"null")||{
+ history:[], morningLog:[], measurements:[], cyclePos:0, custom:{}
+};
+function save(){localStorage.setItem("maxTrainingApp",JSON.stringify(state))}
+const app=document.getElementById("app"), nav=document.getElementById("nav"), modal=document.getElementById("modalWrap"), sheet=document.getElementById("sheet");
+let currentDay=null, session={}, currentPage="home";
+
+function fmtDate(iso){
+ const d=new Date(iso+"T12:00:00"); return d.toLocaleDateString("ru-RU",{day:"2-digit",month:"2-digit",year:"numeric"});
+}
+function todayISO(){
+ const d=new Date(),p=n=>String(n).padStart(2,"0");
+ return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`;
+}
+function sortedHistory(){return [...state.history].sort((a,b)=>b.date.localeCompare(a.date))}
+function nextDay(){return CYCLE[state.cyclePos%CYCLE.length]}
+function cycleHTML(){
+ return `<div class="cycle">${CYCLE.map((x,i)=>`<span class="${i===state.cyclePos%CYCLE.length?'next':''}">${x}</span>`).join("")}</div>`;
+}
+function setNav(active){
+ nav.innerHTML=[
+ ["home","⌂","Главная"],["morning","☀","Утро"],["progress","↗","Прогресс"],["achievements","★","Ачивки"]
+ ].map(x=>`<button class="navBtn ${active===x[0]?'active':''}" onclick="go('${x[0]}')"><span>${x[1]}</span>${x[2]}</button>`).join("");
+}
+function go(p){currentPage=p;if(p==="home")home();if(p==="morning")morningPage();if(p==="progress")progressPage();if(p==="achievements")achievementsPage();}
+function home(){
+ setNav("home"); currentPage="home";
+ const n=nextDay();
+ app.innerHTML=`<div class="topbar"><div class="brand"><h1>Тренировки</h1><p>Цикл без привязки к дням недели</p></div><div class="avatar">M</div></div>
+ <div class="hero"><div class="eyebrow">Следующая по циклу</div><h2>${n}</h2><p>${n==="C"?"Кардио + ноги + здоровье плеча":defs[n].sub}</p>
+ <div class="heroBtns"><button class="btn primary" onclick="${n==="C"?"openC()":`openDay('${n}')`}">Начать ${n}</button><button class="btn ghost" onclick="showCycleInfo()">Цикл</button></div>${cycleHTML()}</div>
+ <div class="sectionTitle"><h3>Выбрать тренировку</h3><span>можно открыть любую</span></div>
+ <div class="dayGrid">
+ ${["A1","B1","A2","B2"].map(d=>`<button class="dayCard" onclick="openDay('${d}')"><strong>${d}</strong><small>${defs[d].sub}</small></button>`).join("")}
+ <button class="dayCard c" onclick="openC()"><strong>C</strong><small>Ротация · ноги · кардио</small></button>
+ <button class="dayCard" onclick="morningPage()"><strong>Утро</strong><small>Разминка · шея · тазовое дно</small></button>
+ </div>
+ <div class="sectionTitle"><h3>Последние тренировки</h3><span>новые сверху</span></div>
+ <div class="historyList">${sortedHistory().slice(0,5).map(historyRow).join("")}</div>`;
+}
+function historyRow(h){
+ return `<button class="historyItem" onclick='historyDetail(${JSON.stringify(h).replace(/'/g,"&#39;")})'><div class="left"><div class="dayPill ${h.day==="C"?"c":""}">${h.day}</div><div class="historyMeta"><b>${fmtDate(h.date)}</b><small>${h.summary||"Тренировка"}</small></div></div><div class="chev">›</div></button>`;
+}
+
+function openDay(day){
+ currentDay=day; session={};
+ setNav("");
+ const d=defs[day];
+ app.innerHTML=`<div class="pageHead"><button class="back" onclick="home()">‹</button><div><h2>${d.title}</h2><p>${d.sub}</p></div></div>
+ <div class="sessionProgress"><div class="progressTop"><span>Тренировка</span><b id="sessionPct">0%</b></div><div class="bar"><span id="sessionBar"></span></div></div>
+ ${day==="A2"||day==="B2"?`<div class="notice">Сегодня меняем только те упражнения, где вариация действительно полезна. База остаётся стабильной, чтобы можно было видеть прогрессию.</div>`:""}
+ <div id="exerciseList">${d.ex.map((e,i)=>exerciseCard(e,i)).join("")}</div>
+ <div class="footerAction"><button class="btn primary full" onclick="finishStrength('${day}')">Завершить тренировку</button></div>`;
+ d.ex.forEach((e,i)=>updateExProgress(i));
+}
+function exerciseCard(e,i){
+ const chosen=session[i]?.alt||null, name=chosen?chosen.ru:e.ru, en=chosen?chosen.en:e.en;
+ return `<div class="exercise" id="ex${i}">
+ <div class="exHead"><div><div class="exTitle">${name}<span class="en">${en}</span></div>${chosen?`<span class="altBadge">Альтернатива выбрана</span>`:""}</div>
+ <div class="iconBtns"><button class="iconBtn" onclick="guide(${i})">?</button><button class="iconBtn" onclick="alternatives(${i})">⇄</button></div></div>
+ <div class="prev">Прошлый ориентир: <b>${e.prev}</b><br>Цель: ${e.sets} подх. × ${e.target}</div>
+ <div class="sets">${Array.from({length:e.sets},(_,k)=>setBox(i,k)).join("")}</div>
+ <div class="exProgress"><div class="progressTop"><span>К следующему шагу</span><b id="ep${i}">0%</b></div><div class="bar"><span id="eb${i}"></span></div><div class="note" id="em${i}"></div></div>
+ </div>`;
+}
+function setBox(i,k){
+ return `<div class="set"><strong><span>Подход ${k+1}</span><span id="ok${i}_${k}"></span></strong><div class="fields">
+ <label>Вес<input type="number" step="0.5" inputmode="decimal" oninput="setVal(${i},${k},'w',this.value)"></label>
+ <label>Повт.<input type="number" inputmode="numeric" oninput="setVal(${i},${k},'r',this.value)"></label>
+ </div></div>`;
+}
+function setVal(i,k,key,v){
+ if(!session[i])session[i]={sets:[]};
+ if(!session[i].sets)session[i].sets=[];
+ if(!session[i].sets[k])session[i].sets[k]={};
+ session[i].sets[k][key]=v;
+ updateExProgress(i); updateSessionProgress();
+}
+function parseTarget(t){let m=t.match(/(\d+)\D+(\d+)/);return m?[+m[1],+m[2]]:[10,12]}
+function updateExProgress(i){
+ if(!currentDay)return; const e=defs[currentDay].ex[i], s=session[i]?.sets||[], [mn,mx]=parseTarget(e.target);
+ let score=0, filled=0;
+ for(let k=0;k<e.sets;k++){
+  const r=+(s[k]?.r||0), w=s[k]?.w;
+  if(r>0){filled++;score+=Math.min(1,r/mx)}
+  const ok=document.getElementById(`ok${i}_${k}`); if(ok)ok.textContent=r>=mn?"✓":"";
+ }
+ let pct=Math.round((score/e.sets)*100); pct=Math.max(0,Math.min(100,pct));
+ const ep=document.getElementById("ep"+i), eb=document.getElementById("eb"+i), em=document.getElementById("em"+i);
+ if(ep)ep.textContent=pct+"%"; if(eb)eb.style.width=pct+"%";
+ if(em){
+   if(pct>=100) em.textContent=e.reverse?"Все подходы закрыты — на следующей такой тренировке можно тестировать меньший противовес.":"Все подходы закрыты — можно думать о небольшом повышении веса.";
+   else if(filled) em.textContent=`Заполнено подходов: ${filled}/${e.sets}`;
+   else em.textContent="Заполни сегодняшние подходы — шкала обновится.";
+ }
+}
+function updateSessionProgress(){
+ if(!currentDay)return; const ex=defs[currentDay].ex;
+ let done=0; ex.forEach((e,i)=>{const s=session[i]?.sets||[];if(s.filter(x=>+(x?.r||0)>0).length>=Math.min(2,e.sets))done++;});
+ const pct=Math.round(done/ex.length*100);
+ const p=document.getElementById("sessionPct"),b=document.getElementById("sessionBar");if(p)p.textContent=pct+"%";if(b)b.style.width=pct+"%";
+}
+function guide(i, fromMorning=false){
+ let title,en,steps,errors=[],muscles="",yt="";
+ if(fromMorning){
+   const m=morning[i]; title=m.name; en=m.dose; steps=[m.guide]; muscles=m.why; yt=m.name;
+ } else {
+   const e=defs[currentDay].ex[i]; const alt=session[i]?.alt;
+   title=alt?alt.ru:e.ru; en=alt?alt.en:e.en; steps=e.steps; errors=e.errors; muscles=e.muscles; yt=en;
+ }
+ sheet.innerHTML=`<div class="handle"></div><h3>${title}</h3><div class="sub">${en}</div>
+ ${muscles?`<div class="prev"><b>Зачем:</b> ${muscles}</div>`:""}
+ <div class="detailRows">${steps.map((s,k)=>`<div class="guideStep"><b>${k+1}.</b> ${s}</div>`).join("")}</div>
+ ${errors.length?`<div class="notice"><b>Не делай:</b><br>${errors.join(" · ")}</div>`:""}
+ <a class="yt" target="_blank" href="https://www.youtube.com/results?search_query=${encodeURIComponent(yt+" exercise technique")}">Видео по технике на YouTube ↗</a>`;
+ openModal();
+}
+function alternatives(i){
+ const e=defs[currentDay].ex[i];
+ sheet.innerHTML=`<div class="handle"></div><h3>Альтернативы</h3><div class="sub">${e.ru}</div>
+ ${e.alts.length?e.alts.map((a,k)=>`<div class="altCard"><b>${a.ru}</b><div class="equip">${a.en} · ${a.equip}</div><p>${a.why}</p><button class="btn" onclick="chooseAlt(${i},${k})">Выбрать</button> <a class="yt" target="_blank" href="https://www.youtube.com/results?search_query=${encodeURIComponent(a.en+" exercise technique")}">YouTube ↗</a></div>`).join(""):`<div class="notice">Для этого упражнения сейчас не задана полезная замена — оставляем базовый вариант.</div>`}
+ ${session[i]?.alt?`<button class="btn ghost full" onclick="resetAlt(${i})">Вернуть основное упражнение</button>`:""}`;
+ openModal();
+}
+function chooseAlt(i,k){if(!session[i])session[i]={sets:[]};session[i].alt=defs[currentDay].ex[i].alts[k];closeModal();refreshExercise(i)}
+function resetAlt(i){if(session[i])delete session[i].alt;closeModal();refreshExercise(i)}
+function refreshExercise(i){
+ const el=document.getElementById("ex"+i);if(!el)return; el.outerHTML=exerciseCard(defs[currentDay].ex[i],i);updateExProgress(i)
+}
+function openModal(){modal.style.display="flex"}
+function closeModal(){modal.style.display="none"}
+modal.addEventListener("click",e=>{if(e.target===modal)closeModal()});
+
+function finishStrength(day){
+ const details=defs[day].ex.map((e,i)=>{
+  const s=session[i]?.sets||[]; const vals=s.filter(x=>x&&(x.w||x.r)).map(x=>`${x.w||"—"}×${x.r||"—"}`).join(" / ");
+  const alt=session[i]?.alt;
+  return [alt?alt.ru:e.ru, vals||"не записано"];
+ });
+ state.history.push({date:todayISO(),day,summary:defs[day].sub,details});
+ state.cyclePos=(CYCLE.indexOf(day,state.cyclePos)+1)%CYCLE.length;
+ save(); unlockToast(); home();
+}
+
+function openC(){
+ currentDay="C"; setNav(""); session={};
+ app.innerHTML=`<div class="pageHead"><button class="back" onclick="home()">‹</button><div><h2>C</h2><p>Одинаковый лёгкий день</p></div></div>
+ <div class="notice">Сначала короткие упражнения, длинная дорожка — последней. Нижний пресс оставлен опциональным: он не нужен для «сжигания живота».</div>
+ ${cRoutine.map((x,i)=>cCard(x,i)).join("")}
+ <div class="footerAction"><button class="btn green full" onclick="finishC()">Завершить C</button></div>`;
+}
+function cCard(x,i){
+ let body="";
+ if(x.type==="sets")body=`<div class="sets"><div class="set"><div class="fields"><label>Вес<input id="cw${i}" type="number" inputmode="decimal"></label><label>Повторы<input id="cr${i}" type="number" inputmode="numeric"></label></div></div><div class="set"><strong>${x.dose}</strong><div class="note">Зафиксируй рабочий ориентир</div></div></div>`;
+ if(x.type==="cardio")body=`<div class="sets"><div class="set"><div class="fields"><label>Минуты<input id="cm${i}" type="number" inputmode="numeric"></label><label>Скорость<input id="cs${i}" type="number" step="0.1" inputmode="decimal"></label></div></div><div class="set"><div class="fields"><label>Наклон %<input id="ci${i}" type="number" step="0.5"></label><label>Дистанция<input id="cd${i}" type="number" step="0.1"></label></div></div></div>`;
+ if(x.type==="check")body=`<div class="checkItem"><label><input id="cc${i}" type="checkbox"> Сделал</label><small>${x.dose}</small></div>`;
+ return `<div class="exercise"><div class="exHead"><div class="exTitle">${x.name}<span class="en">${x.en}</span></div><button class="iconBtn" onclick="cGuide(${i})">?</button></div><div class="prev">${x.dose}${x.optional?" · необязательно":""}</div>${body}</div>`;
+}
+function cGuide(i){const x=cRoutine[i];sheet.innerHTML=`<div class="handle"></div><h3>${x.name}</h3><div class="sub">${x.en}</div><div class="guideStep">${x.guide}</div>`;openModal()}
+function finishC(){
+ const details=cRoutine.map((x,i)=>{
+  if(x.type==="sets")return [x.name,`${document.getElementById("cw"+i)?.value||"—"} кг · ${document.getElementById("cr"+i)?.value||"—"} повт.`];
+  if(x.type==="cardio")return [x.name,`${document.getElementById("cm"+i)?.value||"—"} мин · ${document.getElementById("cs"+i)?.value||"—"} км/ч · наклон ${document.getElementById("ci"+i)?.value||"—"}%`];
+  return [x.name,document.getElementById("cc"+i)?.checked?"сделано":"пропущено"];
+ });
+ state.history.push({date:todayISO(),day:"C",summary:"Кардио + ноги + здоровье плеча",details});
+ state.cyclePos=(state.cyclePos+1)%CYCLE.length; save(); unlockToast(); home();
+}
+
+function morningPage(){
+ setNav("morning"); currentPage="morning";
+ app.innerHTML=`<div class="topbar"><div class="brand"><h1>Утро</h1><p>Разминка + шея + тазовое дно</p></div><div class="avatar">☀</div></div>
+ <div class="sessionProgress"><div class="progressTop"><span>Сегодня</span><b id="morningPct">0%</b></div><div class="bar"><span id="morningBar"></span></div></div>
+ ${morning.map((m,i)=>`<div class="checkItem"><label><input type="checkbox" id="m${i}" onchange="morningProgress()"> ${m.name}</label><div style="display:flex;align-items:center;gap:8px"><small>${m.dose}</small><button class="smallInfo" onclick="guide(${i},true)">?</button></div></div>`).join("")}
+ <div class="footerAction"><button class="btn primary full" onclick="saveMorning()">Сохранить утро</button></div>`;
+}
+function morningProgress(){
+ let n=0; morning.forEach((_,i)=>{if(document.getElementById("m"+i)?.checked)n++});const pct=Math.round(n/morning.length*100);
+ document.getElementById("morningPct").textContent=pct+"%";document.getElementById("morningBar").style.width=pct+"%";
+}
+function saveMorning(){
+ const done=morning.filter((_,i)=>document.getElementById("m"+i)?.checked).length;
+ state.morningLog=state.morningLog.filter(x=>x.date!==todayISO());state.morningLog.push({date:todayISO(),done,total:morning.length});save();unlockToast();home();
+}
+
+function progressPage(){
+ setNav("progress"); currentPage="progress";
+ const hs=sortedHistory(), ms=[...state.measurements].sort((a,b)=>b.date.localeCompare(a.date));
+ const cCount=hs.filter(x=>x.day==="C").length;
+ app.innerHTML=`<div class="topbar"><div class="brand"><h1>Прогресс</h1><p>Тренировки, замеры и рабочие ориентиры</p></div><div class="avatar">↗</div></div>
+ <div class="metricGrid">
+ <div class="metric"><span>Тренировок</span><b>${hs.length}</b></div>
+ <div class="metric"><span>Дней C</span><b>${cCount}</b></div>
+ <div class="metric"><span>Гравитрон</span><b>23 кг</b></div>
+ <div class="metric"><span>Lat Pulldown</span><b>40 кг</b></div>
+ </div>
+ <div class="formCard"><b>Добавить замер</b><div class="formRow" style="margin-top:10px"><input id="mw" placeholder="Вес, кг" inputmode="decimal"><input id="mwaist" placeholder="Талия, см" inputmode="decimal"></div><button class="btn" style="margin-top:9px" onclick="addMeasure()">Сохранить</button></div>
+ <div class="sectionTitle"><h3>Замеры</h3><span>${ms.length?"новые сверху":"пока пусто"}</span></div>
+ <div class="historyList">${ms.length?ms.slice(0,6).map(m=>`<div class="historyItem"><div class="historyMeta"><b>${fmtDate(m.date)}</b><small>${m.weight||"—"} кг · талия ${m.waist||"—"} см</small></div></div>`).join(""):`<div class="notice">Добавь первый вес и талию — потом здесь появится динамика.</div>`}</div>
+ <div class="sectionTitle"><h3>История тренировок</h3><span>нажми, чтобы открыть</span></div>
+ <div class="historyList">${hs.map(historyRow).join("")}</div>`;
+}
+function addMeasure(){const w=document.getElementById("mw").value,waist=document.getElementById("mwaist").value;if(!w&&!waist)return;state.measurements.push({date:todayISO(),weight:w,waist});save();progressPage()}
+
+function historyDetail(h){
+ const detail=(h.details||[]).map(x=>`<div class="detailRow"><b>${x[0]}</b><small>${x[1]}</small></div>`).join("");
+ sheet.innerHTML=`<div class="handle"></div><h3>${h.day} · ${fmtDate(h.date)}</h3><div class="sub">${h.summary||""}</div><div class="detailRows">${detail||'<div class="notice">Подробности этой тренировки не записаны.</div>'}</div>`;
+ openModal();
+}
+function achievements(){
+ const hs=state.history, ms=state.measurements;
+ const c40=hs.some(h=>h.day==="C"&&(h.details||[]).some(d=>d[0]==="Дорожка"&&parseInt(d[1])>=40));
+ const morning7=state.morningLog.length>=7;
+ const count=hs.length;
+ const waistDrop=ms.length>=2 && (+ms[0].waist-+ms[ms.length-1].waist)>=2;
+ return [
+ ["🏁","Первый шаг","Первая записанная тренировка",count>=1],
+ ["🔥","Три подряд","Три тренировки в журнале",count>=3],
+ ["🧱","Десятка","10 тренировок",count>=10],
+ ["🏗️","Двадцать пять","25 тренировок",count>=25],
+ ["🪽","23 Club","Гравитрон 23 кг · 4×12",false],
+ ["🦅","18 кг — тест","Попробовать 18 кг противовеса",false],
+ ["🚂","40 / 40","Lat Pulldown 40 + Seated Row 40",false],
+ ["🎯","Задняя дельта","Reverse Pec Deck 23 кг",false],
+ ["🏃","Кардио 40","40 минут дорожки за C",c40],
+ ["☀️","Утренний ритуал","7 сохранённых утренних комплексов",morning7],
+ ["📏","Минус два","Талия уменьшилась на 2 см",waistDrop],
+ ["🧠","Без хаоса","Завершить полный цикл A1–C–B1–C–A2–C–B2–C",count>=8]
+ ];
+}
+function achievementsPage(){
+ setNav("achievements");currentPage="achievements";const aa=achievements();
+ app.innerHTML=`<div class="topbar"><div class="brand"><h1>Ачивки</h1><p>Чтобы было приятнее возвращаться в зал</p></div><div class="avatar">★</div></div>
+ <div class="achGrid">${aa.map(a=>`<div class="ach ${a[3]?"":"locked"}"><div class="emoji">${a[0]}</div><b>${a[1]}</b><small>${a[2]}</small>${a[3]?'<div class="safe" style="margin-top:7px;font-size:11px;font-weight:800">Открыто ✓</div>':'<div class="note" style="margin-top:7px">Закрыто</div>'}</div>`).join("")}</div>`;
+}
+function unlockToast(){}
+
+function showCycleInfo(){
+ sheet.innerHTML=`<div class="handle"></div><h3>Твой цикл</h3><div class="sub">Без привязки к понедельникам</div>
+ <div class="detailRows">${CYCLE.map((x,i)=>`<div class="detailRow"><b>${i+1}. ${x}</b><small>${x==="C"?"лёгкий день":defs[x].sub}</small></div>`).join("")}</div>
+ <div class="notice">Если пропустил C — не надо «возвращать долг». Можно продолжить следующий силовой день. Если пропустил A/B — на следующем походе в зал продолжаешь с него.</div>`;
+ openModal();
+}
+
+// PWA
+if("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+  navigator.serviceWorker.register("sw.js", {updateViaCache:"none"}).catch(()=>{});
+}
+home();
+</script>
+
+<script>
+// ===== v3 behavior/UI =====
+defs.A1.desc = "Основной день спины и бицепса. Здесь держим стабильную базу, чтобы видеть реальный рост силы: подтягивания, вертикальная и горизонтальная тяга, задняя дельта, бицепс и предплечья.";
+defs.A2.desc = "Вторая тренировка той же группы мышц. Базовые движения остаются узнаваемыми, но часть тяг и бицепса можно менять, если вариация даёт новый полезный стимул и не раздражает плечо.";
+defs.B1.desc = "Основной день плеч и трицепса. Приоритет — визуальная ширина плеч: средняя и задняя дельта, затем трицепс. Жим только в комфортном для правого плеча варианте.";
+defs.B2.desc = "Второй день плеч и трицепса. Не меняем упражнения ради хаоса: база сохраняется, а заднюю дельту/трицепс можно варьировать, чтобы не упираться в один и тот же паттерн.";
+
+function addAlt(id, alts){
+  Object.values(defs).forEach(d=>{
+    (d.ex||[]).forEach(e=>{
+      if(e.id===id){
+        const names=new Set((e.alts||[]).map(a=>a.en));
+        alts.forEach(a=>{if(!names.has(a.en)) e.alts.push(a)});
+      }
+    })
+  })
+}
+addAlt("pullup",[
+ A("Wide Neutral Pulldown","Тяга сверху нейтральным хватом","Блочный/рычажный тренажёр","Больше контроля нагрузки, удобно когда подтягивания сегодня не идут."),
+ A("Single Arm Pulldown","Одноручная вертикальная тяга","Кроссовер","Можно лучше почувствовать сторону отдельно и подобрать комфортную траекторию.")
+]);
+addAlt("lat",[
+ A("Close Grip Lat Pulldown","Вертикальная тяга узким хватом","Верхний блок","Часто комфортнее для плеч и даёт другой акцент широчайшей."),
+ A("Single Arm High Pulley","Одноручная тяга сверху","Кроссовер","Позволяет подобрать траекторию без неприятного ощущения в плече.")
+]);
+addAlt("row",[
+ A("Plate Loaded Row","Рычажная горизонтальная тяга","Рычажный тренажёр","Удобно прогрессировать и работать каждой рукой независимо."),
+ A("One Arm Cable Row","Одноручная тяга сидя","Нижний блок","Хорошая контролируемая альтернатива, если тренажёр занят.")
+]);
+addAlt("rear",[
+ A("Rear Delt Cable Fly","Разведение рук на блоках назад","Кроссовер","Можно тонко настроить траекторию задней дельты."),
+ A("Chest Supported Rear Delt Row","Тяга локтями в стороны с упором грудью","Рычажный/блочный тренажёр","Вариация для задней дельты и верхней части спины.")
+]);
+addAlt("biceps",[
+ A("Incline Dumbbell Curl","Сгибание гантелей на наклонной скамье","Гантели + скамья","Длинная амплитуда и хороший растянутый старт."),
+ A("Single Arm Cable Curl","Одноручный бицепс на блоке","Кроссовер","Легко выровнять правую и левую руку.")
+]);
+addAlt("hammer",[
+ A("Cross Body Hammer Curl","Молотки к противоположному плечу","Гантели","Чуть иной угол для брахиалиса и предплечья.")
+]);
+addAlt("press",[
+ A("Machine Converging Shoulder Press","Сходящийся жим плеч","Рычажный тренажёр","Стабильная траектория; использовать только если плечу комфортно."),
+ A("Landmine Press","Жим лэндмайн одной рукой","Штанга/landmine","Более диагональная траектория, иногда комфортнее для плеч.")
+]);
+addAlt("latmachine",[
+ A("Single Arm Cable Lateral Raise","Разведение одной рукой на блоке","Кроссовер","Очень удобно дозировать нагрузку средней дельты."),
+ A("Leaning Dumbbell Lateral Raise","Разведение гантели с лёгким наклоном","Гантель","Другая кривая нагрузки без большого веса.")
+]);
+addAlt("rope",[
+ A("Single Arm Pushdown","Разгибание одной рукой вниз","Верхний блок","Удобно контролировать каждую руку."),
+ A("Cross Body Cable Extension","Разгибание руки поперёк корпуса","Кроссовер","Комфортная вариация без тяжёлого свободного веса.")
+]);
+addAlt("triceps",[
+ A("Rope Overhead Extension","Разгибание каната из-за головы","Кроссовер + канат","Даёт длинной головке трицепса растянутую позицию; только если плечо комфортно."),
+ A("Single Arm Triceps Machine","Одноручный трицепс в тренажёре","Тренажёр","Удобно выровнять стороны.")
+]);
+addAlt("shrug",[
+ A("Smith Machine Shrug","Шраги в Смите","Smith machine","Проще держать вертикальную траекторию."),
+ A("Cable Shrug","Шраги на нижнем блоке","Кроссовер","Ровная нагрузка и небольшой шаг веса.")
+]);
+
+if(!state.bests) state.bests={pullup:32,dips:32,lat:0,row:0,rear:0,backext:0,biceps:0,hammer:0,wristup:0,wristdown:0,latmachine:0,latdb:0,shrug:0};
+if(state.cyclePos===undefined) state.cyclePos=0;
+
+const progressionCfg={
+ pullup:{reverse:true,steps:[32,27,23,18,14,9,0],unit:"кг противовеса"},
+ dips:{reverse:true,steps:[32,27,23,18,14,9,0],unit:"кг противовеса"},
+ lat:{steps:[30,35,40,45,50,55],unit:"кг"},
+ row:{steps:[30,35,40,45,50,55],unit:"кг"},
+ rear:{steps:[18,23,27,32,36],unit:"кг"},
+ backext:{steps:[30,40,45,50,60],unit:"кг"},
+ biceps:{steps:[14,18,23,27,32],unit:"кг"},
+ hammer:{steps:[6,8,10,12,14],unit:"кг"},
+ wristup:{steps:[8,10,12,14,16],unit:"кг"},
+ wristdown:{steps:[8,10,12,14,16],unit:"кг"},
+ latmachine:{steps:[14,18,23,27,32],unit:"кг"},
+ latdb:{steps:[4,5,6,7,8],unit:"кг"},
+ shrug:{steps:[8,10,12,14,16,18],unit:"кг"}
+};
+
+function machineType(label){
+ const t=(label||"").toLowerCase();
+ if(t.includes("tread")) return "tread";
+ if(t.includes("leg press")) return "leg";
+ if(t.includes("pec")||t.includes("rear delt")||t.includes("fly")) return "pec";
+ if(t.includes("pulldown")||t.includes("pull-up")||t.includes("pulley")) return "pull";
+ if(t.includes("row")) return "row";
+ if(t.includes("shoulder press")||t.includes("landmine")) return "press";
+ if(t.includes("lateral")) return "lateral";
+ if(t.includes("curl")||t.includes("biceps")) return "curl";
+ if(t.includes("triceps")||t.includes("pushdown")||t.includes("extension")||t.includes("skull")) return "tri";
+ if(t.includes("back extension")||t.includes("hyper")) return "back";
+ if(t.includes("shrug")) return "shrug";
+ return "generic";
+}
+function machineVisual(label, cls=""){
+ const type=machineType(label);
+ const common=`stroke="#a9c7ff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"`;
+ let art="";
+ if(type==="pull") art=`<path ${common} d="M58 95V28h55M113 28v15M58 48h28M85 48l18 18M73 97h48M90 66v30M124 31v65"/><circle cx="103" cy="67" r="5" fill="#84e0ad"/>`;
+ else if(type==="row") art=`<path ${common} d="M35 92h95M55 92V60h28l20 20M83 60h27M109 60l18-20M127 40v52"/><circle cx="102" cy="80" r="5" fill="#84e0ad"/>`;
+ else if(type==="pec") art=`<path ${common} d="M48 95V48h66v47M80 48v47M80 63L45 48M80 63l35-15M58 96h45"/><circle cx="80" cy="63" r="5" fill="#84e0ad"/>`;
+ else if(type==="press") art=`<path ${common} d="M45 96h82M62 96V64h38v32M81 64V43M55 42h52M55 42l-9-13M107 42l9-13"/><circle cx="81" cy="64" r="5" fill="#84e0ad"/>`;
+ else if(type==="lateral") art=`<path ${common} d="M45 96h78M62 96V61h37v35M80 61V43M80 53L49 39M80 53l31-14"/><circle cx="80" cy="53" r="5" fill="#84e0ad"/>`;
+ else if(type==="curl") art=`<path ${common} d="M48 96h70M58 96V71h48v25M63 69l17-20 17 20M80 49v-19"/><circle cx="80" cy="49" r="5" fill="#84e0ad"/>`;
+ else if(type==="tri") art=`<path ${common} d="M54 96V28h55M109 28v18M75 45h34M75 45v28M65 73h20M75 73v23"/><circle cx="75" cy="73" r="5" fill="#84e0ad"/>`;
+ else if(type==="leg") art=`<path ${common} d="M42 94h85M56 94l18-31h35l16 31M76 63l24-28M100 35l19 14"/><circle cx="75" cy="63" r="5" fill="#84e0ad"/>`;
+ else if(type==="tread") art=`<path ${common} d="M34 89h94L98 69H45zM99 69V36h20M119 36v10M42 89l-8 9M120 89l8 9"/><circle cx="99" cy="69" r="5" fill="#84e0ad"/>`;
+ else if(type==="back") art=`<path ${common} d="M37 92h90M57 92l15-32h38l13 32M73 60l-10-19M109 60l12-17"/><circle cx="73" cy="60" r="5" fill="#84e0ad"/>`;
+ else art=`<path ${common} d="M42 95h78M58 95V48h48v47M66 48V29M98 48V29M50 29h64"/><circle cx="82" cy="49" r="5" fill="#84e0ad"/>`;
+ return `<div class="machineVisual ${cls}"><svg viewBox="0 0 160 120" aria-hidden="true">${art}</svg></div><div class="machineCaption">Схема похожего типа тренажёра</div>`;
+}
+function progressionScale(e){
+ const c=progressionCfg[e.id]; if(!c)return "";
+ const cur=state.bests[e.id];
+ const steps=c.steps;
+ let idx=0;
+ if(c.reverse){
+   idx=steps.findIndex(x=>x===cur); if(idx<0) idx=0;
+ }else{
+   idx=steps.filter(x=>x<=cur).length-1; if(idx<0) idx=0;
+ }
+ const pct=Math.round((idx/(steps.length-1))*100);
+ return `<div class="exProgress"><div class="progressTop"><span>Личная прогрессия</span><b>${pct}%</b></div><div class="bar"><span style="width:${pct}%"></span></div>
+ <div class="milestones">${steps.map((s,i)=>`<span class="mile ${i<idx?"hit":i===idx?"now":""}">${s}${c.reverse?"":" кг"}</span>`).join("")}</div></div>`;
+}
+function planProgressHTML(){
+ const pos=state.cyclePos%CYCLE.length;
+ return `<div class="planProgress"><div class="progressTop"><span>Путь по плану</span><b>${pos+1}/8</b></div>
+ <div class="planSteps">${CYCLE.map((_,i)=>`<span class="planStep ${i<pos?"done":i===pos?"current":""}"></span>`).join("")}</div></div>`;
+}
+function recent7(){
+ const cut=new Date();cut.setDate(cut.getDate()-6);const cutISO=cut.toISOString().slice(0,10);
+ return state.history.filter(h=>!h.skipped&&h.date>=cutISO);
+}
+function weekPanel(){
+ const h=recent7(), strengths=h.filter(x=>x.day!=="C").length, cs=h.filter(x=>x.day==="C").length;
+ const morning=state.morningLog.filter(x=>x.date>=(()=>{const d=new Date();d.setDate(d.getDate()-6);return d.toISOString().slice(0,10)})()).length;
+ const rows=[["Силовые",strengths,4],["Дни C",cs,3],["Утро",morning,7]];
+ return `<div class="weekCard"><b>Последние 7 дней</b>${rows.map(r=>{const p=Math.min(100,Math.round(r[1]/r[2]*100));return `<div class="weekRow"><div class="progressTop"><span>${r[0]}</span><b>${r[1]}/${r[2]}</b></div><div class="bar"><span style="width:${p}%"></span></div></div>`}).join("")}</div>`;
+}
+function nextStrengthAfterC(){
+ for(let k=1;k<=CYCLE.length;k++){const d=CYCLE[(state.cyclePos+k)%CYCLE.length];if(d!=="C")return d}
+}
+function startRecommended(){const n=nextDay();n==="C"?openC():openDay(n)}
+function selectDay(day){
+ const rec=nextDay();
+ if(day===rec){openDay(day);return}
+ if(rec==="C" && day===nextStrengthAfterC()){skipPrompt(day);return}
+ jumpPrompt(day);
+}
+function selectC(){nextDay()==="C"?openC():jumpPrompt("C")}
+function skipPrompt(day){
+ sheet.innerHTML=`<div class="handle"></div><h3>Пропустить C?</h3><div class="sub">По плану сейчас C, затем ${day}</div>
+ <div class="notice">Да, так можно. C не является «долгом». Если сегодня хочешь сразу ${day}, приложение отметит C как пропущенный и после ${day} снова предложит C.</div>
+ <button class="btn green full" onclick="closeModal();openC()">Сделать C</button>
+ <button class="btn primary full" style="margin-top:8px" onclick="skipCAndOpen('${day}')">Пропустить C → начать ${day}</button>`;
+ openModal();
+}
+function skipCAndOpen(day){
+ state.history.push({date:todayISO(),day:"C",summary:"Пропущен",skipped:true,details:[]});
+ state.cyclePos=(state.cyclePos+1)%CYCLE.length; save(); closeModal(); openDay(day);
+}
+function jumpPrompt(day){
+ sheet.innerHTML=`<div class="handle"></div><h3>Перейти на ${day}?</h3><div class="sub">Сейчас приложение предлагает ${nextDay()}</div>
+ <div class="notice">Можно открыть любую тренировку. Если перейти на ${day}, приложение продолжит план уже от неё, чтобы верхний блок не путался.</div>
+ <button class="btn primary full" onclick="jumpTo('${day}')">Перейти на ${day}</button>
+ <button class="btn ghost full" style="margin-top:8px" onclick="closeModal()">Отмена</button>`;
+ openModal();
+}
+function jumpTo(day){
+ let idx=state.cyclePos;
+ for(let k=0;k<CYCLE.length;k++){let j=(state.cyclePos+k)%CYCLE.length;if(CYCLE[j]===day){idx=j;break}}
+ state.cyclePos=idx; save(); closeModal(); day==="C"?openC():openDay(day);
+}
+function home(){
+ setNav("home"); currentPage="home"; const n=nextDay(); const after=n==="C"?nextStrengthAfterC():null;
+ app.innerHTML=`<div class="topbar"><div class="brand"><h1>Тренировки</h1><p>План без привязки к дням недели</p></div><div class="avatar">M</div></div>
+ <div class="hero"><div class="planlabel">Следующая тренировка</div><h2>${n}</h2><p>${n==="C"?`Кардио + ноги + здоровье плеча. Можно пропустить и перейти к ${after}, если сегодня нужен силовой день.`:defs[n].sub}</p>
+ <div class="heroBtns"><button class="btn primary" onclick="startRecommended()">Начать ${n}</button>${n==="C"?`<button class="btn ghost" onclick="skipPrompt('${after}')">Пропустить → ${after}</button>`:`<button class="btn ghost" onclick="showPlanInfo()">Порядок</button>`}</div>${planProgressHTML()}</div>
+ ${weekPanel()}
+ <div class="sectionTitle"><h3>Выбрать тренировку</h3><span>открыть можно любую</span></div>
+ <div class="dayGrid">
+ ${["A1","B1","A2","B2"].map(d=>`<button class="dayCard" onclick="selectDay('${d}')"><strong>${d}</strong><small>${defs[d].sub}</small></button>`).join("")}
+ <button class="dayCard c" onclick="selectC()"><strong>C</strong><small>Ротация · ноги · кардио</small></button>
+ <button class="dayCard" onclick="morningPage()"><strong>Утро</strong><small>Разминка · шея · тазовое дно</small></button>
+ </div>
+ <div class="sectionTitle"><h3>Последние тренировки</h3><span>последняя сверху</span></div>
+ <div class="historyList">${sortedHistory().slice(0,6).map(historyRow).join("")}</div>`;
+}
+function historyRow(h){
+ return `<button class="historyItem ${h.skipped?"skip":""}" onclick='historyDetail(${JSON.stringify(h).replace(/'/g,"&#39;")})'><div class="left"><div class="dayPill ${h.day==="C"?"c":""}">${h.day}</div><div class="historyMeta"><b>${fmtDate(h.date)}</b><small>${h.skipped?"Пропущен":(h.summary||"Тренировка")}</small></div></div><div class="chev">›</div></button>`;
+}
+function openDay(day){
+ currentDay=day; session={}; setNav(""); const d=defs[day];
+ app.innerHTML=`<div class="pageHead"><button class="back" onclick="home()">‹</button><div><h2>${d.title}</h2><p>${d.sub}</p></div></div>
+ <div class="workoutDesc"><b>Что сегодня делаем</b><p>${d.desc}</p></div>
+ <div class="sessionProgress"><div class="progressTop"><span>Заполнение тренировки</span><b id="sessionPct">0%</b></div><div class="bar"><span id="sessionBar"></span></div></div>
+ ${day==="A2"||day==="B2"?`<div class="notice">Вариации используются только там, где они действительно полезны. Основные ориентиры сохраняются, чтобы прогресс не терялся.</div>`:""}
+ <div id="exerciseList">${d.ex.map((e,i)=>exerciseCard(e,i)).join("")}</div>
+ <div class="footerAction"><button class="btn primary full" onclick="finishStrength('${day}')">Завершить тренировку</button></div>`;
+ d.ex.forEach((e,i)=>updateExProgress(i));
+}
+function exerciseCard(e,i){
+ const chosen=session[i]?.alt||null, name=chosen?chosen.ru:e.ru, en=chosen?chosen.en:e.en;
+ return `<div class="exercise" id="ex${i}">
+ <div class="exHead"><div><div class="exTitle" onclick="guide(${i})">${name}<span class="en">${en}</span></div>${chosen?`<span class="altBadge">Выбрана замена</span>`:""}</div>
+ <div class="iconBtns"><button class="iconBtn" onclick="guide(${i})">?</button><button class="iconBtn" onclick="alternatives(${i})">⇄</button></div></div>
+ <div class="prev">Прошлый ориентир: <b>${e.prev}</b><br>Сегодняшняя цель: ${e.sets} подх. × ${e.target}</div>
+ ${progressionScale(e)}
+ <div class="sets">${Array.from({length:e.sets},(_,k)=>setBox(i,k)).join("")}</div>
+ <div class="exProgress"><div class="progressTop"><span>Подходы сегодня</span><b id="ep${i}">0%</b></div><div class="bar"><span id="eb${i}"></span></div><div class="note" id="em${i}"></div></div>
+ </div>`;
+}
+function guide(i, fromMorning=false){
+ let title,en,steps,errors=[],muscles="",yt="",visual="";
+ if(fromMorning){
+   const m=morning[i]; title=m.name; en=m.dose; steps=[m.guide]; muscles=m.why; yt=m.name;
+ } else {
+   const e=defs[currentDay].ex[i]; const alt=session[i]?.alt;
+   title=alt?alt.ru:e.ru; en=alt?alt.en:e.en; steps=e.steps; errors=e.errors; muscles=e.muscles; yt=en; visual=machineVisual(en,"guideImage");
+ }
+ sheet.innerHTML=`<div class="handle"></div><h3>${title}</h3><div class="sub">${en}</div>${visual}
+ ${muscles?`<div class="prev"><b>Зачем:</b> ${muscles}</div>`:""}
+ <div class="detailRows">${steps.map((s,k)=>`<div class="guideStep"><b>${k+1}.</b> ${s}</div>`).join("")}</div>
+ ${errors.length?`<div class="notice"><b>Главные ошибки:</b><br>${errors.join(" · ")}</div>`:""}
+ <a class="yt" target="_blank" href="https://www.youtube.com/results?search_query=${encodeURIComponent(yt+" exercise technique")}">Посмотреть технику на YouTube ↗</a>`;
+ openModal();
+}
+function alternatives(i){
+ const e=defs[currentDay].ex[i];
+ sheet.innerHTML=`<div class="handle"></div><h3>Чем заменить</h3><div class="sub">${e.ru}</div>
+ ${e.alts.length?e.alts.map((a,k)=>`<div class="altCard"><b>${a.ru}</b><div class="equip">${a.en} · ${a.equip}</div>${machineVisual(a.en)}<p>${a.why}</p><button class="btn" onclick="chooseAlt(${i},${k})">Выбрать</button> <a class="yt" target="_blank" href="https://www.youtube.com/results?search_query=${encodeURIComponent(a.en+" exercise technique")}">Техника ↗</a></div>`).join(""):`<div class="notice">Здесь специально не добавляем замену ради разнообразия: основное упражнение лучше оставить стабильным.</div>`}
+ ${session[i]?.alt?`<button class="btn ghost full" onclick="resetAlt(${i})">Вернуть основное упражнение</button>`:""}`;
+ openModal();
+}
+function finishStrength(day){
+ const details=defs[day].ex.map((e,i)=>{
+   const s=session[i]?.sets||[]; const vals=s.filter(x=>x&&(x.w||x.r)).map(x=>`${x.w||"—"}×${x.r||"—"}`).join(" / ");
+   const valid=s.filter(x=>+(x?.r||0)>0 && +(x?.w||0)>0);
+   if(valid.length){
+     const cfg=progressionCfg[e.id], candidate=cfg?.reverse?Math.min(...valid.map(x=>+x.w)):Math.max(...valid.map(x=>+x.w));
+     if(cfg?.reverse){if(state.bests[e.id]===undefined||candidate<state.bests[e.id])state.bests[e.id]=candidate}
+     else if(candidate>(state.bests[e.id]||0))state.bests[e.id]=candidate;
+   }
+   const alt=session[i]?.alt; return [alt?alt.ru:e.ru, vals||"не записано"];
+ });
+ state.history.push({date:todayISO(),day,summary:defs[day].sub,details});
+ state.cyclePos=(state.cyclePos+1)%CYCLE.length; save(); home();
+}
+function showPlanInfo(){
+ sheet.innerHTML=`<div class="handle"></div><h3>Порядок тренировок</h3><div class="sub">A1 → C → B1 → C → A2 → C → B2 → C</div>
+ <div class="detailRows">${CYCLE.map((x,i)=>`<div class="detailRow"><b>${i+1}. ${x}</b><small>${x==="C"?"кардио + ноги + плечевое здоровье":defs[x].sub}</small></div>`).join("")}</div>
+ <div class="notice">C можно пропустить. Тогда просто выбираешь следующий силовой день, приложение помечает C как пропущенный и после силовой снова предлагает C.</div>`;
+ openModal();
+}
+function achievements(){
+ const hs=state.history.filter(x=>!x.skipped), ms=[...state.measurements].sort((a,b)=>a.date.localeCompare(b.date));
+ const cCount=hs.filter(x=>x.day==="C").length, count=hs.length;
+ const morningCount=state.morningLog.length;
+ const firstWaist=ms.find(x=>x.waist)?.waist, lastWaist=[...ms].reverse().find(x=>x.waist)?.waist;
+ const firstWeight=ms.find(x=>x.weight)?.weight, lastWeight=[...ms].reverse().find(x=>x.weight)?.weight;
+ const waistDrop=firstWaist&&lastWaist?Math.max(0,+firstWaist-+lastWaist):0;
+ const weightDrop=firstWeight&&lastWeight?Math.max(0,+firstWeight-+lastWeight):0;
+ const grav=state.bests.pullup??32, lat=state.bests.lat??0, row=state.bests.row??0, rear=state.bests.rear??0;
+ return [
+ ach("🏁","Первый шаг","Первая сохранённая тренировка",count,1),
+ ach("🔥","Вошёл во вкус","5 тренировок",count,5),
+ ach("🧱","Десятка","10 тренировок",count,10),
+ ach("🏗️","25 тренировок","Четверть сотни",count,25),
+ ach("🏛️","Полтинник","50 тренировок",count,50),
+ ach("💯","Сотня","100 тренировок",count,100),
+ ach("🪽","23 Club","Подтягивания 23 кг противовеса",32-grav,9),
+ ach("🦅","18 кг","Дойти до 18 кг противовеса",32-grav,14),
+ ach("🚀","Без помощи","Подтягивания без противовеса",32-grav,32),
+ ach("🚂","Тягач 40/40","Lat Pulldown и Seated Row по 40",Math.min(lat,row),40),
+ ach("🚚","Тягач 50/50","Обе тяги по 50",Math.min(lat,row),50),
+ ach("🎯","Задняя дельта","Reverse Pec Deck 23 кг",rear,23),
+ ach("🦾","Задняя дельта 30+","Reverse Pec Deck 30 кг",rear,30),
+ ach("🏃","Кардио вошло","3 дня C",cCount,3),
+ ach("❤️","Кардио привычка","10 дней C",cCount,10),
+ ach("🌞","Утро × 7","7 сохранённых утренних комплексов",morningCount,7),
+ ach("🌅","Утро × 30","30 утренних комплексов",morningCount,30),
+ ach("📏","Талия −2","Минус 2 см от первого замера",waistDrop,2),
+ ach("🪡","Талия −5","Минус 5 см",waistDrop,5),
+ ach("⚖️","Вес −2","Минус 2 кг от первого замера",weightDrop,2),
+ ach("🪶","Вес −5","Минус 5 кг",weightDrop,5),
+ ach("🧠","Полный круг","8 выполненных тренировок/дней C",count,8),
+ ach("⚡","Стабильность","20 записей активности",count+cCount+morningCount,20),
+ ach("👑","Машина","75 тренировок",count,75)
+ ];
+}
+function ach(emoji,name,desc,current,goal){return {emoji,name,desc,current:+current||0,goal,done:(+current||0)>=goal}}
+function achievementsPage(){
+ setNav("achievements");currentPage="achievements";const aa=achievements();
+ app.innerHTML=`<div class="topbar"><div class="brand"><h1>Ачивки</h1><p>Маленькие победы по дороге</p></div><div class="avatar">★</div></div>
+ <div class="metricGrid"><div class="metric"><span>Открыто</span><b>${aa.filter(a=>a.done).length}</b></div><div class="metric"><span>Всего</span><b>${aa.length}</b></div></div>
+ <div class="achGrid" style="margin-top:10px">${aa.map(a=>{const pct=Math.min(100,Math.round(a.current/a.goal*100));return `<div class="ach ${a.done?"":"locked"}"><div class="emoji">${a.emoji}</div><b>${a.name}</b><small>${a.desc}</small><div class="progressTop"><span>${Math.min(a.current,a.goal)}/${a.goal}</span><b>${pct}%</b></div><div class="bar"><span style="width:${pct}%"></span></div>${a.done?'<div class="safe" style="margin-top:7px;font-size:11px;font-weight:800">Открыто ✓</div>':''}</div>`}).join("")}</div>`;
+}
+function progressPage(){
+ setNav("progress"); currentPage="progress";
+ const hs=sortedHistory(), ms=[...state.measurements].sort((a,b)=>b.date.localeCompare(a.date)), cCount=hs.filter(x=>x.day==="C"&&!x.skipped).length;
+ const a=achievements(), unlocked=a.filter(x=>x.done).length, ap=Math.round(unlocked/a.length*100);
+ app.innerHTML=`<div class="topbar"><div class="brand"><h1>Прогресс</h1><p>История, замеры и личные шкалы</p></div><div class="avatar">↗</div></div>
+ <div class="metricGrid"><div class="metric"><span>Тренировок</span><b>${hs.filter(x=>!x.skipped).length}</b></div><div class="metric"><span>Дней C</span><b>${cCount}</b></div><div class="metric"><span>Гравитрон</span><b>${state.bests.pullup} кг</b></div><div class="metric"><span>Lat Pulldown</span><b>${state.bests.lat} кг</b></div></div>
+ <div class="weekCard"><div class="progressTop"><span>Ачивки</span><b>${unlocked}/${a.length}</b></div><div class="bar"><span style="width:${ap}%"></span></div>${planProgressHTML()}</div>
+ <div class="formCard"><b>Добавить замер</b><div class="formRow" style="margin-top:10px"><input id="mw" placeholder="Вес, кг" inputmode="decimal"><input id="mwaist" placeholder="Талия, см" inputmode="decimal"></div><button class="btn" style="margin-top:9px" onclick="addMeasure()">Сохранить</button></div>
+ <div class="sectionTitle"><h3>Замеры</h3><span>${ms.length?"новые сверху":"пока пусто"}</span></div>
+ <div class="historyList">${ms.length?ms.slice(0,8).map(m=>`<div class="historyItem"><div class="historyMeta"><b>${fmtDate(m.date)}</b><small>${m.weight||"—"} кг · талия ${m.waist||"—"} см</small></div></div>`).join(""):`<div class="notice">Добавь первый вес и талию — появится динамика.</div>`}</div>
+ <div class="sectionTitle"><h3>История тренировок</h3><span>нажми для деталей</span></div><div class="historyList">${hs.map(historyRow).join("")}</div>`;
+}
+
+home();
+</script>
+
+
+<script>
+// ===== v4 logic =====
+if(!state.roundStats) state.roundStats={completed:0,skipped:0};
+if(!state.restDate) state.restDate=null;
+if(!state.createdSeq) state.createdSeq=1;
+
+// Normalize older history with timestamps/order and completion.
+(function normalizeHistory(){
+  let seq=1;
+  state.history.forEach(h=>{
+    if(!h.createdAt){
+      const base = new Date((h.date||todayISO())+"T08:00:00").getTime();
+      h.createdAt = base + seq*60000;
+    }
+    if(h.completion===undefined) h.completion = h.skipped ? 0 : 100;
+    seq++;
+  });
+  state.createdSeq=Math.max(state.createdSeq||1,seq);
+  save();
+})();
+
+function nowStamp(){ return Date.now()+((state.createdSeq++)*10); }
+function tomorrowISO(){
+  const d=new Date(); d.setHours(12,0,0,0); d.setDate(d.getDate()+1); return d.toISOString().slice(0,10);
+}
+function longToday(){
+  return new Date().toLocaleDateString("ru-RU",{weekday:"long",day:"numeric",month:"long"});
+}
+function sortedHistory(){
+  return [...state.history].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+}
+function percentLabel(h){ return h.skipped?0:(h.completion??100); }
+function historyRow(h){
+  const p=percentLabel(h);
+  return `<button class="historyItem ${h.skipped?"skip":""}" onclick='historyDetail(${JSON.stringify(h).replace(/'/g,"&#39;")})'>
+    <div class="left">
+      <div class="dayPill ${h.day==="C"?"c":h.day==="REST"?"restPill":""}">${h.day==="REST"?"OFF":h.day}</div>
+      <div class="historyMeta">
+        <b>${fmtDate(h.date)}</b>
+        <small>${h.skipped?"C пропущен":(h.summary||"Тренировка")}</small>
+        <div class="miniBar"><span style="width:${p}%"></span></div>
+      </div>
+    </div>
+    <div class="historyPct ${p>=100?"full":p===0?"zero":""}">${p}%</div>
+  </button>`;
+}
+function planStrip(){
+  const pos=state.cyclePos%CYCLE.length;
+  return `<div class="progressHalo">
+    <div class="progressTop"><span>Путь тренировок</span><b>${pos}/8 пройдено</b></div>
+    <div class="planRibbon">${CYCLE.map((x,i)=>`<span class="planNode ${i<pos?"done":i===pos?"current":""}"></span>`).join("")}<span class="planNode rest"></span></div>
+    <div class="planLabels"><span>A1</span><span>C</span><span>B1</span><span>C</span><span>A2</span><span>C</span><span>B2</span><span>C</span><span>OFF</span></div>
+  </div>`;
+}
+function isRestToday(){ return state.restDate===todayISO(); }
+
+function home(){
+  setNav("home"); currentPage="home";
+  const n=nextDay(), after=n==="C"?nextStrengthAfterC():null, rest=isRestToday();
+  app.innerHTML=`<div class="topbar"><div class="brand"><h1>Тренировки</h1><p>Персональный план без привязки к неделе</p><div class="dateChip"><span class="dateDot"></span>${longToday()}</div></div><div class="avatar">M</div></div>
+  ${rest?`
+    <div class="restCard"><h3>Сегодня выходной ✦</h3><p>Ты полностью закрыл предыдущий путь из 8 тренировочных дней. Сегодня восстановление — это часть прогресса, а не пауза от него.</p>
+    <div class="heroBtns" style="margin-top:12px"><button class="btn green" onclick="logRest()">Засчитать отдых</button><button class="btn ghost" onclick="ignoreRest()">Тренироваться всё равно</button></div></div>
+  `:`
+    <div class="hero"><div class="planlabel">Следующая тренировка</div><h2>${n}</h2><p>${n==="C"?`Кардио + ноги + здоровье плеча. Если C сегодня не подходит, можно перейти к ${after}; приложение сохранит порядок и пометит C как пропущенный.`:defs[n].sub}</p>
+      <div class="heroBtns"><button class="btn primary" onclick="startRecommended()">Начать ${n}</button>${n==="C"?`<button class="btn ghost" onclick="skipPrompt('${after}')">Перейти к ${after}</button>`:`<button class="btn ghost" onclick="showPlanInfo()">Порядок</button>`}</div>
+    </div>`}
+  ${planStrip()}
+  ${weekPanel()}
+  <div class="sectionTitle"><h3>Выбрать тренировку</h3><span>открыть можно любую</span></div>
+  <div class="dayGrid">
+    ${["A1","B1","A2","B2"].map(d=>`<button class="dayCard" onclick="selectDay('${d}')"><strong>${d}</strong><small>${defs[d].sub}</small></button>`).join("")}
+    <button class="dayCard c" onclick="selectC()"><strong>C</strong><small>Ротация · ноги · кардио</small></button>
+    <button class="dayCard rest" onclick="manualRest()"><strong>OFF</strong><small>Выходной / восстановление</small></button>
+  </div>
+  <div class="sectionTitle"><h3>Последние тренировки</h3><span>последняя сверху</span></div>
+  <div class="historyList">${sortedHistory().slice(0,7).map(historyRow).join("")}</div>`;
+}
+function skipPrompt(day){
+  sheet.innerHTML=`<div class="handle"></div><h3>Перейти к ${day}?</h3><div class="sub">Сейчас по плану стоит C</div>
+  <div class="notice">Можно. В истории сначала появится <b>C · пропущен</b>, а после завершения ${day} — сама тренировка ${day}. Так последовательность останется понятной.</div>
+  <button class="btn green full" onclick="closeModal();openC()">Начать C</button>
+  <button class="btn primary full" style="margin-top:8px" onclick="skipCAndOpen('${day}')">Перейти к ${day}</button>`;
+  openModal();
+}
+function skipCAndOpen(day){
+  state.history.push({date:todayISO(),day:"C",summary:"C пропущен",skipped:true,completion:0,details:[],createdAt:nowStamp()});
+  state.roundStats.skipped=(state.roundStats.skipped||0)+1;
+  state.cyclePos=(state.cyclePos+1)%CYCLE.length; save(); closeModal(); openDay(day);
+}
+
+function calcStrengthCompletion(day){
+  const d=defs[day]; let done=0;
+  d.ex.forEach((e,i)=>{
+    const s=session[i]?.sets||[];
+    if(s.some(x=>+(x?.r||0)>0)) done++;
+  });
+  return Math.round(done/d.ex.length*100);
+}
+function finishStrength(day){
+  const completion=calcStrengthCompletion(day);
+  const details=defs[day].ex.map((e,i)=>{
+    const s=session[i]?.sets||[];
+    const vals=s.filter(x=>x&&(x.w||x.r)).map(x=>`${x.w||"—"}×${x.r||"—"}`).join(" / ");
+    const valid=s.filter(x=>+(x?.r||0)>0 && +(x?.w||0)>0);
+    if(valid.length){
+      const cfg=progressionCfg[e.id], candidate=cfg?.reverse?Math.min(...valid.map(x=>+x.w)):Math.max(...valid.map(x=>+x.w));
+      if(cfg?.reverse){ if(state.bests[e.id]===undefined||candidate<state.bests[e.id]) state.bests[e.id]=candidate; }
+      else if(candidate>(state.bests[e.id]||0)) state.bests[e.id]=candidate;
+    }
+    const alt=session[i]?.alt;
+    return [alt?alt.ru:e.ru, vals||"не записано"];
+  });
+  state.history.push({date:todayISO(),day,summary:defs[day].sub,details,completion,createdAt:nowStamp()});
+  state.roundStats.completed=(state.roundStats.completed||0)+1;
+  advancePlanAfterCompleted();
+  save();
+  completionScreen(day,completion);
+}
+function cCompletion(){
+  let done=0,total=0;
+  cRoutine.forEach((x,i)=>{
+    if(x.optional) return;
+    total++;
+    if(x.type==="sets"){
+      if(document.getElementById("cw"+i)?.value || document.getElementById("cr"+i)?.value) done++;
+    }else if(x.type==="cardio"){
+      if(+document.getElementById("cm"+i)?.value>0) done++;
+    }else{
+      if(document.getElementById("cc"+i)?.checked) done++;
+    }
+  });
+  return Math.round(done/Math.max(1,total)*100);
+}
+function finishC(){
+  const completion=cCompletion();
+  const details=cRoutine.map((x,i)=>{
+    if(x.type==="sets")return [x.name,`${document.getElementById("cw"+i)?.value||"—"} кг · ${document.getElementById("cr"+i)?.value||"—"} повт.`];
+    if(x.type==="cardio")return [x.name,`${document.getElementById("cm"+i)?.value||"—"} мин · ${document.getElementById("cs"+i)?.value||"—"} км/ч · наклон ${document.getElementById("ci"+i)?.value||"—"}%`];
+    return [x.name,document.getElementById("cc"+i)?.checked?"сделано":"пропущено"];
+  });
+  state.history.push({date:todayISO(),day:"C",summary:"Кардио + ноги + здоровье плеча",details,completion,createdAt:nowStamp()});
+  state.roundStats.completed=(state.roundStats.completed||0)+1;
+  advancePlanAfterCompleted();
+  save();
+  completionScreen("C",completion);
+}
+function advancePlanAfterCompleted(){
+  state.cyclePos=(state.cyclePos+1)%CYCLE.length;
+  if(state.cyclePos===0){
+    if((state.roundStats.completed||0)>=8 && (state.roundStats.skipped||0)===0){
+      state.restDate=tomorrowISO();
+    }
+    state.roundStats={completed:0,skipped:0};
+  }
+}
+function motivation(pct){
+  if(pct>=100) return "Чистая работа. Ты закрыл тренировку полностью — именно из таких спокойных повторений и складывается большой прогресс.";
+  if(pct>=80) return "Очень сильный день. Не обязательно каждый раз выбивать идеальные 100% — главное, что основная работа сделана и записана.";
+  if(pct>=60) return "Хорошая тренировка. Ты сделал большую часть плана, а журнал теперь точно знает, откуда продолжать в следующий раз.";
+  return "Даже короткая тренировка считается. Ты пришёл, сделал часть работы и сохранил движение вперёд — это намного ценнее нуля.";
+}
+function completionScreen(day,pct){
+  setNav("");
+  const next=nextDay();
+  app.innerHTML=`<div class="completeScreen">
+    <div class="completeBurst"><b>${pct}%</b></div>
+    <h1>Тренировка завершена</h1>
+    <div class="speech">${motivation(pct)}</div>
+    <div class="completeStats">
+      <div class="completeStat"><span>Сегодня</span><b>${day}</b></div>
+      <div class="completeStat"><span>Дальше</span><b>${state.restDate===tomorrowISO()?"OFF":next}</b></div>
+    </div>
+    <div class="achOverall"><div class="progressTop"><span>Выполнение</span><b>${pct}%</b></div><div class="bar"><span style="width:${pct}%"></span></div></div>
+    <button class="btn primary full" onclick="home()">На главную</button>
+    <button class="btn ghost full" style="margin-top:8px" onclick="progressPage()">Посмотреть прогресс</button>
+  </div>`;
+  launchConfetti(pct);
+}
+function launchConfetti(pct){
+  if(pct<60)return;
+  const wrap=document.createElement("div");wrap.className="confetti";
+  const cols=["#78a9ff","#78dda6","#ffd36f","#b495ff","#ff9db6"];
+  for(let i=0;i<(pct>=100?55:30);i++){
+    const p=document.createElement("i");
+    p.style.left=(Math.random()*100)+"vw";
+    p.style.background=cols[i%cols.length];
+    p.style.animationDelay=(Math.random()*.7)+"s";
+    p.style.animationDuration=(1.4+Math.random()*1.3)+"s";
+    wrap.appendChild(p);
+  }
+  document.body.appendChild(wrap);
+  setTimeout(()=>wrap.remove(),3000);
+}
+function logRest(){
+  if(!state.history.some(h=>h.day==="REST"&&h.date===todayISO())){
+    state.history.push({date:todayISO(),day:"REST",summary:"Выходной · восстановление",completion:100,details:[["Фокус","сон, питание, прогулка, восстановление"]],createdAt:nowStamp()});
+  }
+  state.restDate=null; save(); home();
+}
+function ignoreRest(){ state.restDate=null; save(); home(); }
+function manualRest(){
+  sheet.innerHTML=`<div class="handle"></div><h3>Записать выходной?</h3><div class="sub">${longToday()}</div>
+  <div class="notice">Порядок тренировок не сдвинется. Ты просто фиксируешь день восстановления и завтра продолжаешь с того же места.</div>
+  <button class="btn green full" onclick="closeModal();logManualRest()">Записать выходной</button>`;
+  openModal();
+}
+function logManualRest(){
+  state.history.push({date:todayISO(),day:"REST",summary:"Выходной · восстановление",completion:100,details:[["Фокус","восстановление без силовой нагрузки"]],createdAt:nowStamp()});
+  save(); home();
+}
+function historyDetail(h){
+  const p=percentLabel(h);
+  const detail=(h.details||[]).map(x=>`<div class="detailRow"><b>${x[0]}</b><small>${x[1]}</small></div>`).join("");
+  sheet.innerHTML=`<div class="handle"></div><h3>${h.day==="REST"?"Выходной":h.day} · ${fmtDate(h.date)}</h3><div class="sub">${h.summary||""}</div>
+    <div class="achOverall"><div class="progressTop"><span>Выполнение</span><b>${p}%</b></div><div class="bar"><span style="width:${p}%"></span></div></div>
+    <div class="detailRows">${detail||'<div class="notice">Подробности не записаны.</div>'}</div>`;
+  openModal();
+}
+
+// Achievement detail & overall progress.
+function achDifficulty(a){
+  if(a.goal<=3) return ["Низкая","diff-low"];
+  if(a.goal<=10) return ["Средняя","diff-mid"];
+  if(a.goal<=50) return ["Высокая","diff-high"];
+  return ["Эпическая","diff-epic"];
+}
+function achExplain(a){
+  const map={
+    "Первый шаг":"Сохрани хотя бы одну тренировку в приложении. Это старт всей статистики.",
+    "23 Club":"Дойти в подтягиваниях в гравитроне до 23 кг противовеса и уверенно работать на этом уровне.",
+    "18 кг":"Следующий серьёзный этап: уменьшить помощь гравитрона до 18 кг.",
+    "Без помощи":"Финальная цель шкалы гравитрона — выполнить подтягивания без противовеса.",
+    "Тягач 40/40":"Иметь рабочий ориентир 40 кг и в Lat Pulldown, и в Seated Row.",
+    "Тягач 50/50":"Поднять оба основных тяговых ориентира до 50 кг.",
+    "Полный круг":"Закрыть полный путь тренировок без пропущенных пунктов.",
+    "Утро × 30":"Сохранить 30 утренних комплексов. Не обязательно подряд."
+  };
+  return map[a.name]||a.desc+". Прогресс считается автоматически по твоим записям.";
+}
+function achievementDetail(idx){
+  const aa=achievements(),a=aa[idx],d=achDifficulty(a),pct=Math.min(100,Math.round(a.current/a.goal*100));
+  sheet.innerHTML=`<div class="handle"></div><div class="achDetailHero"><div class="bigEmoji">${a.emoji}</div><h3>${a.name}</h3><div class="difficulty ${d[1]}">${d[0]} сложность</div></div>
+  <div class="achReq"><b>Что требуется</b><div class="sub">${achExplain(a)}</div></div>
+  <div class="achOverall"><div class="progressTop"><span>Твой прогресс</span><b>${Math.min(a.current,a.goal)}/${a.goal}</b></div><div class="bar"><span style="width:${pct}%"></span></div></div>
+  <div class="prev">${a.done?"Ачивка уже открыта ✓":"До открытия осталось: "+Math.max(0,a.goal-a.current)}</div>`;
+  openModal();
+}
+function achievementsPage(){
+  setNav("achievements");currentPage="achievements";const aa=achievements(), unlocked=aa.filter(a=>a.done).length;
+  const overall=Math.round(unlocked/aa.length*100);
+  app.innerHTML=`<div class="topbar"><div class="brand"><h1>Ачивки</h1><p>Твои маленькие и большие победы</p><div class="dateChip"><span class="dateDot"></span>${longToday()}</div></div><div class="avatar">★</div></div>
+  <div class="achOverall"><div class="progressTop"><span>Общий прогресс ачивок</span><b>${unlocked}/${aa.length} · ${overall}%</b></div><div class="bar"><span style="width:${overall}%"></span></div></div>
+  <div class="achGrid">${aa.map((a,i)=>{const pct=Math.min(100,Math.round(a.current/a.goal*100)),d=achDifficulty(a);return `<button class="ach ${a.done?"":"locked"}" onclick="achievementDetail(${i})"><div class="emoji">${a.emoji}</div><b>${a.name}</b><small>${a.desc}</small><div class="difficulty ${d[1]}">${d[0]}</div><div class="progressTop"><span>${Math.min(a.current,a.goal)}/${a.goal}</span><b>${pct}%</b></div><div class="bar"><span style="width:${pct}%"></span></div>${a.done?'<div class="safe" style="margin-top:7px;font-size:11px;font-weight:800">Открыто ✓</div>':''}</button>`}).join("")}</div>`;
+}
+function progressPage(){
+  setNav("progress");currentPage="progress";
+  const hs=sortedHistory(),ms=[...state.measurements].sort((a,b)=>b.date.localeCompare(a.date)),cCount=hs.filter(x=>x.day==="C"&&!x.skipped).length;
+  const aa=achievements(),unlocked=aa.filter(a=>a.done).length,ap=Math.round(unlocked/aa.length*100);
+  const avg=hs.filter(h=>h.day!=="REST").length?Math.round(hs.filter(h=>h.day!=="REST").reduce((s,h)=>s+percentLabel(h),0)/hs.filter(h=>h.day!=="REST").length):0;
+  app.innerHTML=`<div class="topbar"><div class="brand"><h1>Прогресс</h1><p>История, замеры и личные шкалы</p><div class="dateChip"><span class="dateDot"></span>${longToday()}</div></div><div class="avatar">↗</div></div>
+  <div class="metricGrid"><div class="metric"><span>Записей</span><b>${hs.length}</b></div><div class="metric"><span>Среднее выполнение</span><b>${avg}%</b></div><div class="metric"><span>Гравитрон</span><b>${state.bests.pullup} кг</b></div><div class="metric"><span>Дней C</span><b>${cCount}</b></div></div>
+  <div class="achOverall"><div class="progressTop"><span>Ачивки</span><b>${unlocked}/${aa.length}</b></div><div class="bar"><span style="width:${ap}%"></span></div></div>
+  ${planStrip()}
+  <div class="formCard"><b>Добавить замер</b><div class="formRow" style="margin-top:10px"><input id="mw" placeholder="Вес, кг" inputmode="decimal"><input id="mwaist" placeholder="Талия, см" inputmode="decimal"></div><button class="btn" style="margin-top:9px" onclick="addMeasure()">Сохранить</button></div>
+  <div class="formCard"><b>Приложение · v1.0.0</b><div class="sub" style="margin-top:6px;line-height:1.45">Обновления устанавливаются автоматически. Кнопка ниже принудительно проверит новую версию.</div><button class="btn" style="margin-top:9px" onclick="checkForUpdate()">Проверить обновление</button></div>
+  <div class="formCard"><b>Резервная копия</b><div class="sub" style="margin-top:6px;line-height:1.45">Сохрани тренировки перед сменой телефона или на случай очистки браузера.</div><div class="heroBtns" style="margin-top:11px"><button class="btn primary" onclick="exportBackup()">Сохранить копию</button><label class="btn" style="display:grid;place-items:center"><input type="file" accept="application/json,.json" hidden onchange="importBackup(event)">Восстановить</label></div></div>
+  <div class="sectionTitle"><h3>Замеры</h3><span>${ms.length?"новые сверху":"пока пусто"}</span></div>
+  <div class="historyList">${ms.length?ms.slice(0,8).map(m=>`<div class="historyItem"><div class="historyMeta"><b>${fmtDate(m.date)}</b><small>${m.weight||"—"} кг · талия ${m.waist||"—"} см</small></div></div>`).join(""):`<div class="notice">Добавь первый вес и талию — появится динамика.</div>`}</div>
+  <div class="sectionTitle"><h3>История</h3><span>нажми для деталей</span></div><div class="historyList">${hs.map(historyRow).join("")}</div>`;
+}
+
+async function exportBackup(){
+  const payload=JSON.stringify({app:"max-training",version:1,exportedAt:new Date().toISOString(),state},null,2);
+  const name=`training-backup-${todayISO()}.json`;
+  const file=new File([payload],name,{type:"application/json"});
+  try{
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      await navigator.share({title:"Резервная копия тренировок",files:[file]});
+      return;
+    }
+  }catch(err){if(err&&err.name==="AbortError")return;}
+  const url=URL.createObjectURL(file),a=document.createElement("a");
+  a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+async function importBackup(event){
+  const file=event.target.files&&event.target.files[0];
+  event.target.value="";
+  if(!file)return;
+  try{
+    const parsed=JSON.parse(await file.text());
+    const incoming=parsed&&parsed.state?parsed.state:parsed;
+    if(!incoming||!Array.isArray(incoming.history)||!Array.isArray(incoming.measurements)) throw new Error("bad-backup");
+    if(!confirm("Заменить текущие данные содержимым резервной копии?"))return;
+    Object.keys(state).forEach(key=>delete state[key]);
+    Object.assign(state,incoming);
+    save();progressPage();
+    alert("Данные восстановлены.");
+  }catch(err){alert("Не получилось прочитать эту резервную копию.");}
+}
+
+async function checkForUpdate(){
+  if(!("serviceWorker" in navigator)){alert("Обновления недоступны в этом браузере.");return;}
+  try{
+    const reg=await navigator.serviceWorker.getRegistration();
+    if(!reg){alert("Открой приложение ещё раз — обновления активируются автоматически.");return;}
+    await reg.update();
+    if(reg.waiting) reg.waiting.postMessage({type:"SKIP_WAITING"});
+    alert("Проверка завершена. Если вышла новая версия, она применится при следующем открытии.");
+  }catch(err){alert("Сейчас не удалось проверить обновление. Попробуй позже.");}
+}
+
+home();
+</script>
+
+</body>
+</html>
