@@ -1,4 +1,4 @@
-const CACHE = 'training-v1.0.0';
+const CACHE = 'training-v1.1.0';
 const APP_SHELL = [
   './index.html',
   './manifest.webmanifest',
