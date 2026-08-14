@@ -301,6 +301,49 @@ body{
 .achReq{border:1px solid #334563;background:#101a2c;border-radius:16px;padding:12px;margin-top:12px}
 .achReq b{display:block;margin-bottom:5px}
 .restPill{background:#2f2740!important;color:#e4d7ff!important}
+
+/* ===== v1.1 workout drafts, load notes and editing ===== */
+.draftStack{display:grid;gap:9px;margin:0 0 14px}
+.draftCard{
+  border:1px solid #45658f;background:linear-gradient(145deg,#172944,#111d31);
+  border-radius:18px;padding:14px;box-shadow:0 8px 24px rgba(0,0,0,.16)
+}
+.draftCardTop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.draftCard b{font-size:15px}.draftCard small{display:block;color:#a9b8cf;margin-top:5px;line-height:1.35}
+.draftBadge{flex:0 0 auto;padding:5px 8px;border-radius:9px;background:#244b38;color:#caffdc;font-size:10px;font-weight:900}
+.draftActions{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:12px}
+.btn.danger{background:#39232b;border-color:#65404c;color:#ffd5df}
+.cardActions{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;max-width:190px}
+.cardAction{
+  min-height:34px;border:1px solid #344765;background:#101a2c;color:#cfe0ff;
+  border-radius:10px;padding:7px 9px;font-size:10px;font-weight:850
+}
+.loadHint{
+  margin-top:10px;padding:10px 11px;border-radius:13px;border:1px solid #304460;
+  background:#0e192a;color:#c5d2e6;font-size:11px;line-height:1.4
+}
+.loadHint b{color:#f4f8ff}.loadHint.ready{border-color:#4f745d;background:#14271e;color:#d0f6dc}
+.loadHint .hintTitle{display:block;color:#8fa2be;font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:.45px;margin-bottom:3px}
+.progressionNote{margin-top:7px;color:#91a2bb;font-size:10px;line-height:1.35}
+.increaseBtn{
+  width:100%;margin-top:10px;min-height:42px;border:1px solid #3a4d6a;background:#111c30;
+  color:#cfdbef;border-radius:12px;padding:9px 11px;font-size:12px;font-weight:850;text-align:left
+}
+.increaseBtn.active{background:#1d3d2c;border-color:#4c7d5e;color:#d7ffe3}
+.workoutTools{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.orderSheetActions{display:grid;gap:8px;margin-top:14px}
+.catalogList{display:grid;gap:7px;margin-top:12px;max-height:38vh;overflow:auto}
+.catalogItem{border:1px solid #30415e;background:#101a2c;border-radius:13px;padding:11px;text-align:left;color:#f4f7ff}
+.catalogItem b{display:block;font-size:13px}.catalogItem small{display:block;color:#8fa1bc;margin-top:3px}
+.customExerciseForm{display:grid;gap:8px;margin-top:12px}
+.customExerciseForm input{
+  width:100%;background:#0b1322;border:1px solid #344664;border-radius:11px;
+  padding:11px;color:white;font-size:16px
+}
+.customExerciseForm .pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.draftSaved{display:inline-flex;align-items:center;gap:6px;color:#a7d9b7;font-size:10px;font-weight:800;margin-top:6px}
+.draftSaved:before{content:"";width:6px;height:6px;border-radius:50%;background:#78dda6}
+@media(max-width:370px){.cardActions{max-width:150px}.cardAction{padding:7px 6px}.workoutTools{grid-template-columns:1fr}}
 </style>
 
 </head>
@@ -1244,7 +1287,7 @@ function progressPage(){
   <div class="achOverall"><div class="progressTop"><span>Ачивки</span><b>${unlocked}/${aa.length}</b></div><div class="bar"><span style="width:${ap}%"></span></div></div>
   ${planStrip()}
   <div class="formCard"><b>Добавить замер</b><div class="formRow" style="margin-top:10px"><input id="mw" placeholder="Вес, кг" inputmode="decimal"><input id="mwaist" placeholder="Талия, см" inputmode="decimal"></div><button class="btn" style="margin-top:9px" onclick="addMeasure()">Сохранить</button></div>
-  <div class="formCard"><b>Приложение · v1.0.0</b><div class="sub" style="margin-top:6px;line-height:1.45">Обновления устанавливаются автоматически. Кнопка ниже принудительно проверит новую версию.</div><button class="btn" style="margin-top:9px" onclick="checkForUpdate()">Проверить обновление</button></div>
+  <div class="formCard"><b>Приложение · v1.1.0</b><div class="sub" style="margin-top:6px;line-height:1.45">Обновления устанавливаются автоматически. Кнопка ниже принудительно проверит новую версию.</div><button class="btn" style="margin-top:9px" onclick="checkForUpdate()">Проверить обновление</button></div>
   <div class="formCard"><b>Резервная копия</b><div class="sub" style="margin-top:6px;line-height:1.45">Сохрани тренировки перед сменой телефона или на случай очистки браузера.</div><div class="heroBtns" style="margin-top:11px"><button class="btn primary" onclick="exportBackup()">Сохранить копию</button><label class="btn" style="display:grid;place-items:center"><input type="file" accept="application/json,.json" hidden onchange="importBackup(event)">Восстановить</label></div></div>
   <div class="sectionTitle"><h3>Замеры</h3><span>${ms.length?"новые сверху":"пока пусто"}</span></div>
   <div class="historyList">${ms.length?ms.slice(0,8).map(m=>`<div class="historyItem"><div class="historyMeta"><b>${fmtDate(m.date)}</b><small>${m.weight||"—"} кг · талия ${m.waist||"—"} см</small></div></div>`).join(""):`<div class="notice">Добавь первый вес и талию — появится динамика.</div>`}</div>
@@ -1252,7 +1295,7 @@ function progressPage(){
 }
 
 async function exportBackup(){
-  const payload=JSON.stringify({app:"max-training",version:1,exportedAt:new Date().toISOString(),state},null,2);
+  const payload=JSON.stringify({app:"max-training",version:2,exportedAt:new Date().toISOString(),state},null,2);
   const name=`training-backup-${todayISO()}.json`;
   const file=new File([payload],name,{type:"application/json"});
   try{
@@ -1277,6 +1320,10 @@ async function importBackup(event){
     if(!confirm("Заменить текущие данные содержимым резервной копии?"))return;
     Object.keys(state).forEach(key=>delete state[key]);
     Object.assign(state,incoming);
+    if(!state.workoutDrafts)state.workoutDrafts={};
+    if(!state.exerciseRecords)state.exerciseRecords={};
+    if(!Array.isArray(state.customExercises))state.customExercises=[];
+    if(!state.roundStats)state.roundStats={completed:0,skipped:0};
     save();progressPage();
     alert("Данные восстановлены.");
   }catch(err){alert("Не получилось прочитать эту резервную копию.");}
@@ -1292,6 +1339,358 @@ async function checkForUpdate(){
     alert("Проверка завершена. Если вышла новая версия, она применится при следующем открытии.");
   }catch(err){alert("Сейчас не удалось проверить обновление. Попробуй позже.");}
 }
+
+// ===== v1.1: persistent workout drafts, load notes and workout editing =====
+if(!state.workoutDrafts || Array.isArray(state.workoutDrafts)) state.workoutDrafts={};
+if(!state.exerciseRecords) state.exerciseRecords={};
+if(!Array.isArray(state.customExercises)) state.customExercises=[];
+
+let workoutExercises=[];
+let currentDraftKey=null;
+let cSession={};
+let catalogChoices=[];
+
+function copyData(value){ return JSON.parse(JSON.stringify(value)); }
+function esc(value){
+  return String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+}
+function inputNumber(value){
+  if(value===undefined || value===null || value==="") return undefined;
+  const n=Number(String(value).replace(",","."));
+  return Number.isFinite(n)?n:undefined;
+}
+function prepareExercise(exercise){
+  const e=copyData(exercise);
+  if(!Array.isArray(e.alts)) e.alts=[];
+  if(!Array.isArray(e.steps)) e.steps=["Выполняй движение контролируемо и без боли."];
+  if(!Array.isArray(e.errors)) e.errors=[];
+  if(!e._instanceId) e._instanceId=`${e.id||"exercise"}-${Date.now()}-${Math.random().toString(36).slice(2,7)}`;
+  return e;
+}
+function draftKey(kind,day){ return `${kind}:${day}`; }
+function draftTime(draft){
+  const date=new Date(draft.updatedAt||draft.startedAt||Date.now());
+  return date.toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"});
+}
+function draftCompletion(draft){
+  if(draft.kind==="strength"){
+    const ex=draft.exercises||[], data=draft.session||{};
+    if(!ex.length) return 0;
+    const done=ex.filter((e,i)=>(data[i]?.sets||[]).some(x=>+(x?.r||0)>0)).length;
+    return Math.round(done/ex.length*100);
+  }
+  let done=0,total=0;
+  cRoutine.forEach((x,i)=>{
+    if(x.optional)return;
+    total++;
+    const value=(draft.data||{})[i]||{};
+    if(x.type==="sets" && (value.w!==undefined&&value.w!=="" || +(value.r||0)>0))done++;
+    else if(x.type==="cardio" && +(value.minutes||0)>0)done++;
+    else if(x.type==="check" && value.done)done++;
+  });
+  return Math.round(done/Math.max(1,total)*100);
+}
+function draftsHTML(){
+  const drafts=Object.entries(state.workoutDrafts).sort((a,b)=>(b[1].updatedAt||0)-(a[1].updatedAt||0));
+  if(!drafts.length)return "";
+  return `<div class="draftStack">${drafts.map(([key,d])=>{
+    const pct=draftCompletion(d), title=d.kind==="strength"?`Тренировка ${esc(d.day)}`:"Тренировка C";
+    return `<div class="draftCard"><div class="draftCardTop"><div><b>Незавершённая ${title}</b><small>Сохранено в ${draftTime(d)} · заполнено ${pct}%</small></div><span class="draftBadge">Черновик</span></div><div class="miniBar" style="width:100%;margin-top:10px"><span style="width:${pct}%"></span></div><div class="draftActions"><button class="btn primary" onclick="resumeDraft('${key}')">Продолжить</button><button class="btn danger" onclick="deleteDraft('${key}')">Удалить</button></div></div>`;
+  }).join("")}</div>`;
+}
+function resumeDraft(key){
+  const draft=state.workoutDrafts[key];
+  if(!draft)return home();
+  draft.kind==="strength"?openDay(draft.day):openC();
+}
+function deleteDraft(key){
+  const draft=state.workoutDrafts[key];
+  if(!draft)return;
+  const label=draft.kind==="strength"?draft.day:"C";
+  if(!confirm(`Удалить черновик тренировки ${label}? Введённые данные пропадут.`))return;
+  delete state.workoutDrafts[key];
+  if(currentDraftKey===key){currentDraftKey=null;currentDay=null;workoutExercises=[];session={};cSession={};}
+  save();home();
+}
+function deleteCurrentDraft(){ if(currentDraftKey) deleteDraft(currentDraftKey); }
+function persistCurrentDraft(){
+  if(!currentDraftKey)return;
+  if(currentDay==="C") persistCDraft();
+  else if(currentDay) persistStrengthDraft();
+}
+function persistStrengthDraft(){
+  if(!currentDraftKey || !currentDay || currentDay==="C")return;
+  const old=state.workoutDrafts[currentDraftKey]||{};
+  state.workoutDrafts[currentDraftKey]={
+    kind:"strength",day:currentDay,exercises:copyData(workoutExercises),session:copyData(session),
+    startedAt:old.startedAt||Date.now(),updatedAt:Date.now()
+  };
+  save();
+}
+function persistCDraft(){
+  if(!currentDraftKey || currentDay!=="C")return;
+  const old=state.workoutDrafts[currentDraftKey]||{};
+  state.workoutDrafts[currentDraftKey]={kind:"cardio",day:"C",data:copyData(cSession),startedAt:old.startedAt||Date.now(),updatedAt:Date.now()};
+  save();
+}
+
+function openDay(day){
+  currentDay=day;currentPage="workout";currentDraftKey=draftKey("strength",day);setNav("");
+  const saved=state.workoutDrafts[currentDraftKey];
+  workoutExercises=(saved?.exercises||defs[day].ex).map(prepareExercise);
+  session=copyData(saved?.session||{});
+  persistStrengthDraft();
+  renderStrengthWorkout();
+}
+function renderStrengthWorkout(){
+  const day=currentDay,d=defs[day];
+  app.innerHTML=`<div class="pageHead"><button class="back" onclick="home()">‹</button><div><h2>${d.title}</h2><p>${d.sub}</p><span class="draftSaved">Черновик сохраняется сразу</span></div></div>
+  <div class="workoutDesc"><b>Что сегодня делаем</b><p>${d.desc}</p></div>
+  <div class="sessionProgress"><div class="progressTop"><span>Заполнение тренировки</span><b id="sessionPct">0%</b></div><div class="bar"><span id="sessionBar"></span></div></div>
+  ${day==="A2"||day==="B2"?`<div class="notice">Вариации используются только там, где они действительно полезны. Основные ориентиры сохраняются, чтобы прогресс не терялся.</div>`:""}
+  <div id="exerciseList">${workoutExercises.map((e,i)=>exerciseCard(e,i)).join("")}</div>
+  <div class="workoutTools"><button class="btn" onclick="addExerciseSheet()">+ Добавить упражнение</button><button class="btn danger" onclick="deleteCurrentDraft()">Удалить черновик</button></div>
+  <div class="footerAction"><button class="btn primary full" onclick="finishStrength('${day}')">Завершить тренировку</button></div>`;
+  workoutExercises.forEach((_,i)=>updateExProgress(i));
+  updateSessionProgress();
+}
+function setBox(i,k){
+  const item=session[i]?.sets?.[k]||{};
+  return `<div class="set"><strong><span>Подход ${k+1}</span><span id="ok${i}_${k}"></span></strong><div class="fields">
+  <label>Вес<input type="number" step="0.5" inputmode="decimal" value="${esc(item.w??"")}" oninput="setVal(${i},${k},'w',this.value)"></label>
+  <label>Повт.<input type="number" inputmode="numeric" value="${esc(item.r??"")}" oninput="setVal(${i},${k},'r',this.value)"></label>
+  </div></div>`;
+}
+function setVal(i,k,key,value){
+  if(!session[i])session[i]={sets:[]};
+  if(!session[i].sets)session[i].sets=[];
+  if(!session[i].sets[k])session[i].sets[k]={};
+  session[i].sets[k][key]=value;
+  persistStrengthDraft();updateExProgress(i);updateSessionProgress();
+}
+function workingWeight(e,i,requireReps=false){
+  const sets=session[i]?.sets||[];
+  const values=sets.filter(x=>!requireReps || +(x?.r||0)>0).map(x=>inputNumber(x?.w)).filter(x=>x!==undefined);
+  if(!values.length)return undefined;
+  return e.reverse?Math.min(...values):Math.max(...values);
+}
+function formatWeight(e,weight){
+  if(weight===undefined)return "—";
+  return e.reverse?`${weight} кг противовеса`:`${weight} кг`;
+}
+function exerciseRecordKey(e,chosen){ return `${e.id}|${chosen?.ru||e.ru}`; }
+function inferredRecord(e,chosen){
+  const precise=state.exerciseRecords[exerciseRecordKey(e,chosen)];
+  if(precise)return precise;
+  if(state.exerciseRecords[e.id])return state.exerciseRecords[e.id];
+  const names=chosen?[chosen.ru]:[e.ru,...(e.alts||[]).map(a=>a.ru)];
+  for(const h of sortedHistory()){
+    const row=(h.details||[]).find(x=>names.includes(x[0]));
+    if(!row)continue;
+    const weights=[...String(row[1]||"").matchAll(/(\d+(?:[.,]\d+)?)\s*×/g)].map(m=>Number(m[1].replace(",",".")));
+    if(weights.length)return {weight:e.reverse?Math.min(...weights):Math.max(...weights),date:h.date,canIncrease:false};
+  }
+  return null;
+}
+function exerciseHistoryHTML(e,i,chosen){
+  const record=inferredRecord(e,chosen);
+  if(!record)return `<div class="loadHint"><span class="hintTitle">Ориентир из плана</span><b>${esc(e.prev||"пока нет данных")}</b></div>`;
+  const ready=record.canIncrease;
+  const action=e.reverse?"можно уменьшить противовес":"можно увеличить вес";
+  return `<div class="loadHint ${ready?"ready":""}"><span class="hintTitle">В прошлый раз</span><b>Было: ${formatWeight(e,record.weight)}</b>${ready?`<br>Пометка: ${action}`:""}</div>`;
+}
+function progressionScale(e){
+  const cfg=progressionCfg[e.id];
+  if(!cfg)return "";
+  const steps=cfg.steps,cur=state.bests[e.id];
+  if(cur===undefined || cur===null)return "";
+  let idx=steps.indexOf(cur);
+  if(idx<0)idx=steps.reduce((best,x,i)=>Math.abs(x-cur)<Math.abs(steps[best]-cur)?i:best,0);
+  const pct=Math.round((idx/Math.max(1,steps.length-1))*100),next=steps[idx+1];
+  const currentLabel=cfg.reverse?`${cur} кг противовеса`:`${cur} кг`;
+  const nextLabel=next===undefined?"верх шкалы":cfg.reverse?`${next} кг противовеса`:`${next} кг`;
+  return `<div class="exProgress"><div class="progressTop"><span>Личная прогрессия</span><b>${pct}%</b></div><div class="bar"><span style="width:${pct}%"></span></div><div class="progressionNote">Текущий ориентир: <b>${currentLabel}</b> · следующий: <b>${nextLabel}</b></div></div>`;
+}
+function exerciseCard(e,i){
+  const chosen=session[i]?.alt||null,name=chosen?chosen.ru:e.ru,en=chosen?chosen.en:e.en;
+  const marked=!!session[i]?.increase, increaseLabel=e.reverse?"Можно уменьшить противовес":"Можно увеличить вес";
+  return `<div class="exercise" id="ex${i}">
+  <div class="exHead"><div><div class="exTitle">${esc(name)}<span class="en">${esc(en||"")}</span></div>${chosen?`<span class="altBadge">Выбрана замена</span>`:""}</div>
+  <div class="cardActions"><button class="cardAction" onclick="guide(${i})">Техника</button><button class="cardAction" onclick="alternatives(${i})">Замена</button><button class="cardAction" onclick="orderExercise(${i})">Порядок</button></div></div>
+  ${exerciseHistoryHTML(e,i,chosen)}
+  <div class="prev">Сегодняшняя цель: ${e.sets} подх. × ${esc(e.target)}</div>
+  ${progressionScale(e)}
+  <div class="sets">${Array.from({length:e.sets},(_,k)=>setBox(i,k)).join("")}</div>
+  <div class="exProgress"><div class="progressTop"><span>Подходы сегодня</span><b id="ep${i}">0%</b></div><div class="bar"><span id="eb${i}"></span></div><div class="note" id="em${i}"></div></div>
+  <button class="increaseBtn ${marked?"active":""}" aria-pressed="${marked}" onclick="toggleIncrease(${i})">${marked?"✓ Пометка сохранена: ":"Оставить пометку: "}${increaseLabel}</button>
+  </div>`;
+}
+function updateExProgress(i){
+  if(!currentDay || currentDay==="C")return;
+  const e=workoutExercises[i],sets=session[i]?.sets||[],[mn,mx]=parseTarget(e.target||"8–12");
+  let score=0,filled=0;
+  for(let k=0;k<e.sets;k++){
+    const r=+(sets[k]?.r||0);
+    if(r>0){filled++;score+=Math.min(1,r/mx);}
+    const ok=document.getElementById(`ok${i}_${k}`);if(ok)ok.textContent=r>=mn?"✓":"";
+  }
+  const pct=Math.max(0,Math.min(100,Math.round(score/e.sets*100)));
+  const ep=document.getElementById("ep"+i),eb=document.getElementById("eb"+i),em=document.getElementById("em"+i);
+  if(ep)ep.textContent=pct+"%";if(eb)eb.style.width=pct+"%";
+  if(em){
+    if(session[i]?.increase)em.textContent=e.reverse?"Отмечено: в следующий раз уменьшить противовес.":"Отмечено: в следующий раз увеличить вес.";
+    else if(pct>=100)em.textContent="Все подходы закрыты. Если запас остался — оставь пометку ниже.";
+    else if(filled)em.textContent=`Заполнено подходов: ${filled}/${e.sets}`;
+    else em.textContent="Заполни подходы — данные сразу сохранятся в черновик.";
+  }
+}
+function updateSessionProgress(){
+  if(!currentDay || currentDay==="C")return;
+  const done=workoutExercises.filter((e,i)=>(session[i]?.sets||[]).some(x=>+(x?.r||0)>0)).length;
+  const pct=Math.round(done/Math.max(1,workoutExercises.length)*100);
+  const p=document.getElementById("sessionPct"),b=document.getElementById("sessionBar");
+  if(p)p.textContent=pct+"%";if(b)b.style.width=pct+"%";
+}
+function toggleIncrease(i){
+  const e=workoutExercises[i],weight=workingWeight(e,i,false);
+  if(weight===undefined){alert("Сначала введи рабочий вес хотя бы в одном подходе — тогда приложение запомнит, от какого веса двигаться дальше.");return;}
+  if(!session[i])session[i]={sets:[]};
+  session[i].increase=!session[i].increase;
+  session[i].increaseFrom=weight;
+  persistStrengthDraft();refreshExercise(i);updateSessionProgress();
+}
+function guide(i,fromMorning=false){
+  let title,en,steps,errors=[],muscles="",yt="",visual="";
+  if(fromMorning){const m=morning[i];title=m.name;en=m.dose;steps=[m.guide];muscles=m.why;yt=m.name;}
+  else{
+    const e=workoutExercises[i],alt=session[i]?.alt;title=alt?alt.ru:e.ru;en=alt?alt.en:e.en;
+    steps=e.steps||[];errors=e.errors||[];muscles=e.muscles||"";yt=en;visual=machineVisual(en,"guideImage");
+  }
+  sheet.innerHTML=`<div class="handle"></div><h3>${esc(title)}</h3><div class="sub">${esc(en)}</div>${visual}${muscles?`<div class="prev"><b>Зачем:</b> ${esc(muscles)}</div>`:""}<div class="detailRows">${steps.map((s,k)=>`<div class="guideStep"><b>${k+1}.</b> ${esc(s)}</div>`).join("")}</div>${errors.length?`<div class="notice"><b>Главные ошибки:</b><br>${errors.map(esc).join(" · ")}</div>`:""}<a class="yt" target="_blank" href="https://www.youtube.com/results?search_query=${encodeURIComponent(yt+" exercise technique")}">Посмотреть технику на YouTube ↗</a>`;
+  openModal();
+}
+function alternatives(i){
+  const e=workoutExercises[i],alts=e.alts||[];
+  sheet.innerHTML=`<div class="handle"></div><h3>Чем заменить</h3><div class="sub">${esc(e.ru)}</div>${alts.length?alts.map((a,k)=>`<div class="altCard"><b>${esc(a.ru)}</b><div class="equip">${esc(a.en)} · ${esc(a.equip)}</div>${machineVisual(a.en)}<p>${esc(a.why)}</p><button class="btn" onclick="chooseAlt(${i},${k})">Выбрать</button> <a class="yt" target="_blank" href="https://www.youtube.com/results?search_query=${encodeURIComponent(a.en+" exercise technique")}">Техника ↗</a></div>`).join(""):`<div class="notice">Для этого упражнения пока нет заданной замены. Можно добавить другое упражнение отдельным блоком.</div>`}${session[i]?.alt?`<button class="btn ghost full" onclick="resetAlt(${i})">Вернуть основное упражнение</button>`:""}`;
+  openModal();
+}
+function chooseAlt(i,k){
+  if(!session[i])session[i]={sets:[]};session[i].alt=workoutExercises[i].alts[k];persistStrengthDraft();closeModal();refreshExercise(i);
+}
+function resetAlt(i){if(session[i])delete session[i].alt;persistStrengthDraft();closeModal();refreshExercise(i);}
+function refreshExercise(i){
+  const el=document.getElementById("ex"+i);if(!el)return;
+  el.outerHTML=exerciseCard(workoutExercises[i],i);updateExProgress(i);
+}
+function orderExercise(i){
+  const e=workoutExercises[i];
+  sheet.innerHTML=`<div class="handle"></div><h3>Порядок упражнения</h3><div class="sub">${esc(e.ru)}</div><div class="orderSheetActions">${i>0?`<button class="btn" onclick="moveExercise(${i},-1)">Переместить выше</button>`:""}${i<workoutExercises.length-1?`<button class="btn" onclick="moveExercise(${i},1)">Переместить ниже</button>`:""}<button class="btn danger" onclick="removeExercise(${i})">Убрать из этой тренировки</button></div>`;
+  openModal();
+}
+function moveExercise(i,direction){
+  const j=i+direction;if(j<0||j>=workoutExercises.length)return;
+  [workoutExercises[i],workoutExercises[j]]=[workoutExercises[j],workoutExercises[i]];
+  const a=session[i],b=session[j];session[i]=b||{sets:[]};session[j]=a||{sets:[]};
+  persistStrengthDraft();closeModal();renderStrengthWorkout();
+  setTimeout(()=>document.getElementById("ex"+j)?.scrollIntoView({behavior:"smooth",block:"center"}),30);
+}
+function removeExercise(i){
+  if(workoutExercises.length<=1){alert("В тренировке должно остаться хотя бы одно упражнение.");return;}
+  if(!confirm(`Убрать «${workoutExercises[i].ru}» из этой тренировки?`))return;
+  const old=workoutExercises.map((_,k)=>session[k]||{sets:[]});
+  workoutExercises.splice(i,1);old.splice(i,1);session={};old.forEach((x,k)=>session[k]=x);
+  persistStrengthDraft();closeModal();renderStrengthWorkout();
+}
+function exerciseCatalog(){
+  const seen=new Set(),items=[];
+  Object.values(defs).forEach(day=>day.ex.forEach(e=>{const key=`${e.id}|${e.ru}`;if(!seen.has(key)){seen.add(key);items.push(e);}}));
+  state.customExercises.forEach(e=>{const key=`${e.id}|${e.ru}`;if(!seen.has(key)){seen.add(key);items.push(e);}});
+  return items.filter(e=>!workoutExercises.some(x=>x.id===e.id&&x.ru===e.ru));
+}
+function addExerciseSheet(){
+  catalogChoices=exerciseCatalog();
+  sheet.innerHTML=`<div class="handle"></div><h3>Добавить упражнение</h3><div class="sub">Добавится только в текущую тренировку; порядок потом можно изменить.</div><div class="customExerciseForm"><input id="customExerciseName" placeholder="Название своего упражнения"><div class="pair"><input id="customExerciseSets" type="number" min="1" max="8" value="3" inputmode="numeric" placeholder="Подходы"><input id="customExerciseTarget" value="8–12" placeholder="Повторы, например 8–12"></div><button class="btn primary" onclick="addCustomExercise()">Добавить своё</button></div><div class="sectionTitle"><h3>Из текущего плана</h3><span>${catalogChoices.length} вариантов</span></div><div class="catalogList">${catalogChoices.map((e,i)=>`<button class="catalogItem" onclick="addExerciseFromCatalog(${i})"><b>+ ${esc(e.ru)}</b><small>${esc(e.en||"")} · ${e.sets} × ${esc(e.target)}</small></button>`).join("")||`<div class="notice">Все упражнения из плана уже добавлены.</div>`}</div>`;
+  openModal();
+}
+function addExerciseFromCatalog(index){
+  const source=catalogChoices[index];if(!source)return;
+  const e=prepareExercise(source);workoutExercises.push(e);session[workoutExercises.length-1]={sets:[]};
+  persistStrengthDraft();closeModal();renderStrengthWorkout();
+  setTimeout(()=>document.getElementById("ex"+(workoutExercises.length-1))?.scrollIntoView({behavior:"smooth",block:"center"}),30);
+}
+function addCustomExercise(){
+  const name=document.getElementById("customExerciseName")?.value.trim();
+  const sets=Math.max(1,Math.min(8,+(document.getElementById("customExerciseSets")?.value||3)));
+  const target=document.getElementById("customExerciseTarget")?.value.trim()||"8–12";
+  if(!name){alert("Напиши название упражнения.");return;}
+  const e=prepareExercise({id:`custom-${Date.now()}`,ru:name,en:"Своё упражнение",prev:"пока нет данных",target,sets,reverse:false,muscles:"Дополнительное упражнение",steps:["Выбери комфортную технику и работай без боли.","Записывай вес и повторы так же, как в остальных упражнениях."],errors:["Рывки и работа через боль"],alts:[],custom:true});
+  state.customExercises.push(copyData(e));workoutExercises.push(e);session[workoutExercises.length-1]={sets:[]};
+  persistStrengthDraft();closeModal();renderStrengthWorkout();
+  setTimeout(()=>document.getElementById("ex"+(workoutExercises.length-1))?.scrollIntoView({behavior:"smooth",block:"center"}),30);
+}
+function calcStrengthCompletion(){
+  const done=workoutExercises.filter((e,i)=>(session[i]?.sets||[]).some(x=>+(x?.r||0)>0)).length;
+  return Math.round(done/Math.max(1,workoutExercises.length)*100);
+}
+function finishStrength(day){
+  const completion=calcStrengthCompletion(),details=[],exerciseData=[];
+  workoutExercises.forEach((e,i)=>{
+    const sets=session[i]?.sets||[],alt=session[i]?.alt,name=alt?alt.ru:e.ru;
+    const vals=sets.filter(x=>x&&(x.w!==""&&x.w!==undefined||x.r)).map(x=>`${x.w??"—"}×${x.r||"—"}`).join(" / ");
+    const weight=workingWeight(e,i,true),canIncrease=!!session[i]?.increase;
+    if(weight!==undefined){
+      const cfg=progressionCfg[e.id];
+      if(cfg?.reverse){if(state.bests[e.id]===undefined||weight<state.bests[e.id])state.bests[e.id]=weight;}
+      else if(weight>(state.bests[e.id]||0))state.bests[e.id]=weight;
+      state.exerciseRecords[exerciseRecordKey(e,alt)]={weight,date:todayISO(),canIncrease,reverse:!!e.reverse,name};
+    }
+    const note=canIncrease?(e.reverse?" · дальше уменьшить противовес":" · дальше увеличить вес"):"";
+    details.push([name,(vals||"не записано")+note]);
+    exerciseData.push({id:e.id,name,sets:copyData(sets),weight,canIncrease,reverse:!!e.reverse});
+  });
+  state.history.push({date:todayISO(),day,summary:defs[day].sub,details,exerciseData,completion,createdAt:nowStamp()});
+  state.roundStats.completed=(state.roundStats.completed||0)+1;advancePlanAfterCompleted();
+  delete state.workoutDrafts[currentDraftKey];currentDraftKey=null;currentDay=null;workoutExercises=[];session={};save();
+  completionScreen(day,completion);
+}
+
+function openC(){
+  currentDay="C";currentPage="workout";currentDraftKey=draftKey("cardio","C");setNav("");
+  const saved=state.workoutDrafts[currentDraftKey];cSession=copyData(saved?.data||{});persistCDraft();
+  app.innerHTML=`<div class="pageHead"><button class="back" onclick="home()">‹</button><div><h2>C</h2><p>Кардио + ноги + здоровье плеча</p><span class="draftSaved">Черновик сохраняется сразу</span></div></div><div class="notice">Сначала короткие упражнения, длинная дорожка — последней. Нижний пресс оставлен опциональным.</div>${cRoutine.map((x,i)=>cCard(x,i)).join("")}<div class="workoutTools"><span></span><button class="btn danger" onclick="deleteCurrentDraft()">Удалить черновик</button></div><div class="footerAction"><button class="btn green full" onclick="finishC()">Завершить C</button></div>`;
+}
+function cCard(x,i){
+  const value=cSession[i]||{};let body="";
+  if(x.type==="sets")body=`<div class="sets"><div class="set"><div class="fields"><label>Вес<input type="number" inputmode="decimal" value="${esc(value.w??"")}" oninput="setCVal(${i},'w',this.value)"></label><label>Повторы<input type="number" inputmode="numeric" value="${esc(value.r??"")}" oninput="setCVal(${i},'r',this.value)"></label></div></div><div class="set"><strong>${esc(x.dose)}</strong><div class="note">Зафиксируй рабочий ориентир</div></div></div>`;
+  if(x.type==="cardio")body=`<div class="sets"><div class="set"><div class="fields"><label>Минуты<input type="number" inputmode="numeric" value="${esc(value.minutes??"")}" oninput="setCVal(${i},'minutes',this.value)"></label><label>Скорость<input type="number" step="0.1" inputmode="decimal" value="${esc(value.speed??"")}" oninput="setCVal(${i},'speed',this.value)"></label></div></div><div class="set"><div class="fields"><label>Наклон %<input type="number" step="0.5" value="${esc(value.incline??"")}" oninput="setCVal(${i},'incline',this.value)"></label><label>Дистанция<input type="number" step="0.1" value="${esc(value.distance??"")}" oninput="setCVal(${i},'distance',this.value)"></label></div></div></div>`;
+  if(x.type==="check")body=`<div class="checkItem"><label><input type="checkbox" ${value.done?"checked":""} onchange="setCVal(${i},'done',this.checked)"> Сделал</label><small>${esc(x.dose)}</small></div>`;
+  return `<div class="exercise"><div class="exHead"><div class="exTitle">${esc(x.name)}<span class="en">${esc(x.en)}</span></div><button class="cardAction" onclick="cGuide(${i})">Техника</button></div><div class="prev">${esc(x.dose)}${x.optional?" · необязательно":""}</div>${body}</div>`;
+}
+function setCVal(i,key,value){if(!cSession[i])cSession[i]={};cSession[i][key]=value;persistCDraft();}
+function cCompletion(){
+  let done=0,total=0;cRoutine.forEach((x,i)=>{if(x.optional)return;total++;const value=cSession[i]||{};if(x.type==="sets"&&(value.w!==undefined&&value.w!==""||+(value.r||0)>0))done++;else if(x.type==="cardio"&&+(value.minutes||0)>0)done++;else if(x.type==="check"&&value.done)done++;});
+  return Math.round(done/Math.max(1,total)*100);
+}
+function finishC(){
+  const completion=cCompletion();
+  const details=cRoutine.map((x,i)=>{const v=cSession[i]||{};if(x.type==="sets")return[x.name,`${v.w||"—"} кг · ${v.r||"—"} повт.`];if(x.type==="cardio")return[x.name,`${v.minutes||"—"} мин · ${v.speed||"—"} км/ч · наклон ${v.incline||"—"}% · ${v.distance||"—"} км`];return[x.name,v.done?"сделано":"пропущено"];});
+  state.history.push({date:todayISO(),day:"C",summary:"Кардио + ноги + здоровье плеча",details,completion,createdAt:nowStamp()});
+  state.roundStats.completed=(state.roundStats.completed||0)+1;advancePlanAfterCompleted();
+  delete state.workoutDrafts[currentDraftKey];currentDraftKey=null;currentDay=null;cSession={};save();completionScreen("C",completion);
+}
+
+const homeV4=home;
+home=function(){
+  persistCurrentDraft();currentDraftKey=null;currentDay=null;workoutExercises=[];session={};cSession={};
+  homeV4();
+  const drafts=draftsHTML(),top=app.querySelector(".topbar");
+  if(drafts&&top)top.insertAdjacentHTML("afterend",drafts);
+};
+const goV4=go;
+go=function(page){persistCurrentDraft();currentDraftKey=null;currentDay=null;workoutExercises=[];session={};cSession={};goV4(page);};
+window.addEventListener("pagehide",persistCurrentDraft);
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")persistCurrentDraft();});
+save();
 
 home();
 </script>
